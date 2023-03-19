@@ -14,7 +14,7 @@ export default async function Sumary() {
   return (
     <div className="w-full backdrop-blur-sm max-w-6xl flex justify-center h-screen rounded-md bg-white/50 p-4">
       {/* <Summary entries={entries} /> */}
-      {
+      {/* {
         entries.map((entry: any) => {
           return (
             <div key={entry.id}>
@@ -22,7 +22,7 @@ export default async function Sumary() {
             </div>
           );
         })
-      }
+      } */}
 
     </div>
   );
