@@ -15,11 +15,11 @@ export default async function Sumary() {
 
   return (
     <div className="w-full backdrop-blur-sm max-w-6xl flex justify-center h-screen rounded-md bg-white/50 p-4">
-      {/* <Summary entries={entries} /> */}
+      <Summary entries={entries} />
       
-    <pre>
+    {/* <pre>
       {JSON.stringify(entries, null, 2)}
-    </pre>
+    </pre> */}
     </div>
   );
 }
