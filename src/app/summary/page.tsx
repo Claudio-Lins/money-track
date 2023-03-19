@@ -18,7 +18,7 @@ export default async function Sumary() {
       {/* <Summary entries={entries} /> */}
       
     <pre>
-      {JSON.stringify(entries[1], null, 2)}
+      {JSON.stringify(entries, null, 2)}
     </pre>
     </div>
   );
