@@ -18,7 +18,6 @@ export default async function Sumary() {
         entries.map((entry: any) => {
           return (
             <div key={entry.id}>
-              <h1>{entry.title}</h1>
               <p>{entry.amount}</p>
             </div>
           );
