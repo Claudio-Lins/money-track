@@ -23,7 +23,7 @@ export default function RootLayout({
       <body
         style={inter.style}
         className={`
-        w-full h-screen bg-cover bg-no-repeat bg-center bg-fixed relative flex justify-center items-start mt-32
+        w-full bg-cover bg-no-repeat bg-center bg-fixed relative flex justify-center items-start mt-20 md:mt-32
         ${
           theme === "light"
             ? 'bg-[url("/theme/light.jpeg")]'

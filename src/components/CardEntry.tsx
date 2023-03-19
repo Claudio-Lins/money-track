@@ -17,7 +17,7 @@ export function CardEntry({
   arrow,
 }: CardEntryProps) {
   return (
-    <div className="w-full max-w-sm border p-2 rounded-md bg-white h-40 flex flex-col justify-between shadow-md">
+    <div className="w-full md:max-w-xs border py-2 px-4 rounded-md bg-white h-40 flex flex-col justify-between shadow-md">
       <div className="">
         <div className="flex items-center justify-between border-b pb-1">
         <div className="flex items-center gap-2">
@@ -37,13 +37,13 @@ export function CardEntry({
           </button>
         </div>
         </div>
-        <div className="flex flex-col text-sm gap-0 mt-2">
-          <div className="flex flex-wrap gap-2">{category}</div>
+        <div className="flex flex-col text-xs gap-0 mt-2">
+          <div className="flex flex-wrap gap-0">{category}</div>
         </div>
       </div>
       <div className="w-full border-t pt-1 flex justify-between items-center">
         <p className="text-sm font-bold">{place}</p>
-        <p className="text-3xl font-semibold">{amount}</p>
+        <p className="text-2xl font-bold">{amount}</p>
       </div>
     </div>
   );

@@ -88,7 +88,7 @@ export function Summary({ entries }: TableProps) {
       <div className="w-full justify-center flex">
         <Month />
       </div>
-      <div className="flex flex-wrap justify-center w-full border gap-4 rounded-lg px-2 py-4">
+      <div className="flex flex-wrap justify-center w-full gap-4 rounded-lg px-2 py-4">
         {entries
           .filter((entry: any) => entry.type === typeData)
           .map((entry: any) => (
@@ -100,7 +100,7 @@ export function Summary({ entries }: TableProps) {
               }).format(new Date(entry?.createdAt))}
               category={entry.categories?.map((category: any) => (
                 <div key={category.id} className={`
-                flex items-center gap-2 py-1 px-2 text-zinc-900 text-xs rounded-full
+                flex items-center gap-1 py-1 px-2 text-zinc-900 text-xs rounded-full
                 `}>
                   <Image
                     src={category.icon}
