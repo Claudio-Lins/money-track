@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { List, Moon, Sun, X } from "phosphor-react";
 import { useEffect, useState } from "react";
-import { Login } from "./Login";
 
 export function Navbar({ session }: any) {
   const { theme, setTheme } = useThemeStore();
