@@ -7,6 +7,7 @@ async function getEntries() {
 }
 
 export default async function Sumary() {
+
   
   const entries = await getEntries();
 
