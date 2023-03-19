@@ -12,7 +12,6 @@ import { priceFormatter } from "@/utils/formatter";
 
 interface TableProps {
   entries: EntryProps[];
-  category: Category[];
 }
 
 export function Summary({ entries }: TableProps) {
