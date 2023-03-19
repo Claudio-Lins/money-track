@@ -7,22 +7,11 @@ import { Total } from "@/components/Total";
 import prisma from '../lib/prisma'
 
 export default async function Home() {
-  // const users = await fetch("http://localhost:3000/api/user");
-
-  // const entryRes = await fetch("http://localhost:3000/api/entries", {
-  //   next: {
-  //     revalidate: 10,
-  //   },
-  // });
-  // const entries = await entryRes.json();
-
   const entries = await prisma.entry.findMany({
     include: {
       categories: true
     },
   });
-
-  
   return (
     <main className="p-4 backdrop-blur-sm max-w-md flex justify-center items-center rounded-md bg-white/60 h-auto">
       <div className="flex flex-col gap-4">

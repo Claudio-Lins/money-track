@@ -2,7 +2,7 @@ import { Summary } from "@/components/Summary";
 import React from "react";
 
 async function getEntries() {
-  const response = await fetch("http://localhost:3000/api/entries");
+  const response = await fetch(`${process.env.BASE_URL}/api/entries`);
   return response.json();
 }
 
