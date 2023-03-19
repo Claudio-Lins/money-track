@@ -8,15 +8,13 @@ import React from "react";
 
 export default async function Sumary() {
 
-  const entries = await fetch(`${process.env.BASE_URL}/api/entries`).then((res) => res.json());
+  
   // const entries = await getEntries();
 
   return (
     <div className="w-full backdrop-blur-sm max-w-6xl flex justify-center h-screen rounded-md bg-white/50 p-4">
       {/* <Summary entries={entries} /> */}
-      <pre>
-        {JSON.stringify(entries[0], null, 2)}
-      </pre>
+      
 
     </div>
   );
