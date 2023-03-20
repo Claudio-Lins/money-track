@@ -20,6 +20,7 @@ export function Summary({ entries }: TableProps) {
   const [income, setIncome] = useState(true);
   const [expense, setExpense] = useState(false);
   const [total, setTotal] = useState(0);
+  
 
   useEffect(() => {
     if (typeData === "INCOME") {
@@ -86,7 +87,7 @@ export function Summary({ entries }: TableProps) {
         </div>
       </div>
       <div className="w-full justify-center flex">
-        <Month />
+        <Month/>
       </div>
       <div className="flex flex-wrap justify-center w-full gap-4 rounded-lg px-2 py-4">
         {entries

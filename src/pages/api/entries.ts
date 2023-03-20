@@ -11,7 +11,7 @@ export default async function handler(
       categories: true,
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: "asc",
     },
   });
   res.status(200).json(entries);
