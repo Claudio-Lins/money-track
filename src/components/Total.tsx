@@ -1,42 +1,39 @@
 "use client";
-import { EntryProps } from '@/@types/EntryProps';
-import React, { useEffect, useState } from 'react'
+import { EntryProps } from "@/@types/EntryProps";
+import React, { useEffect, useState } from "react";
 
-export function Total({ entries }: any) {
+export function Total({ entriesIncome, entriesExpense }: any) {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
 
   useEffect(() => {
-    const total = entries
-      .filter((entry: EntryProps) => entry.type === "INCOME")
-      .reduce((acc: number, entry: EntryProps) => {
-        return acc + entry?.amount;
-      }, 0);
-      setTotalIncome(total);
-  }, [entries]);
+    const total = entriesIncome.reduce((acc: number, entry: EntryProps) => {
+      return acc + entry?.amount;
+    }, 0);
+    setTotalIncome(total);
+  }, [entriesIncome]);
   useEffect(() => {
-    const total = entries
-      .filter((entry: EntryProps) => entry.type === "EXPENSE")
-      .reduce((acc: number, entry: EntryProps) => {
-        return acc + entry?.amount;
-      }, 0);
+    const total = entriesExpense.reduce((acc: number, entry: EntryProps) => {
+      return acc + entry?.amount;
+    }, 0);
     setTotalExpense(total);
-  }, [entries]);
+  }, [entriesExpense]);
 
   const total = totalIncome - totalExpense;
 
   return (
     <div className="p-2">
-      <strong className={`
+      <strong
+        className={`
       block font-extrabold text-xl
-      ${total <= 0 ? 'text-red-700' : 'text-blue-700'}
-      `}>
-        
+      ${total <= 0 ? "text-red-700" : "text-blue-700"}
+      `}
+      >
         {new Intl.NumberFormat("pt-PT", {
           style: "currency",
           currency: "EUR",
         }).format(total)}
       </strong>
     </div>
-  )
+  );
 }
