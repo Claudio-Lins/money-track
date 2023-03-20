@@ -2,7 +2,11 @@ import { Summary } from "@/components/Summary";
 import React from "react";
 
 async function getEntries() {
-  const response = await fetch(`${process.env.BASE_URL}/api/entries`);
+  const response = await fetch(`${process.env.BASE_URL}/api/entries`,{
+    next: {
+      revalidate: 1,
+    }
+  });
   return response.json();
 }
 
