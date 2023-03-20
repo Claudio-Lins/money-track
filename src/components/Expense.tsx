@@ -3,11 +3,6 @@ import { Category, EntryProps, User } from "@/@types/EntryProps";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-interface ExpenseProps {
-  entries: EntryProps[];
-  category: Category[];
-  User: User | null;
-}
 
 export function Expense({ entries, session }: any) {
   const [totalExpense, setTotalExpense] = useState(0);
@@ -47,7 +42,7 @@ export function Expense({ entries, session }: any) {
                 }).format(entry?.amount)}
               </td>
               <td className="border-collapse border border-white p-2 text-sm">
-                {entry.category?.map((category) => {
+                {entry.categories?.map((category: Category) => {
                   return (
                     <div key={category.id} className="flex items-center gap-2">
                       <Image

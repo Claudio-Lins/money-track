@@ -6,6 +6,8 @@ import { IncomeTotal } from "@/components/IncomeTotal";
 import { Total } from "@/components/Total";
 import prisma from '../lib/prisma'
 
+export const revalidate = 10;
+
 export default async function Home() {
   const entries = await prisma.entry.findMany({
     include: {
