@@ -1,9 +1,4 @@
-import { EntryProps } from "@/@types/EntryProps";
-import { Expense } from "@/components/Expense";
-import { ExpenseTotal } from "@/components/ExpenseTotal";
-import { GoogleBtn } from "@/components/GoogleBtn";
-import { IncomeTotal } from "@/components/IncomeTotal";
-import { Total } from "@/components/Total";
+import { EntryProps } from "@/@types/EntryProps"
 import prisma from '../lib/prisma'
 
 export const revalidate = 10;
