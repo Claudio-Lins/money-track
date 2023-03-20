@@ -1,9 +1,10 @@
+import { useCurrentMonthStore } from "@/store/currentMonthStore";
 import { ArrowLeft, ArrowRight } from "phosphor-react";
 import React, { useState } from "react";
 
 export function Month() {
   const [month, setMonth] = useState(new Date());
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const {currentMonth, setCurrentMonth} = useCurrentMonthStore()
 
   function handleNextMonth() {
     const nextMonth = new Date(month);

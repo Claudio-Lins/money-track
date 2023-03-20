@@ -9,12 +9,14 @@ import { CardEntry } from "./CardEntry";
 import { Month } from "./Month";
 import { useThemeStore } from "@/store/themeStore";
 import { priceFormatter } from "@/utils/formatter";
+import { useCurrentMonthStore } from '../store/currentMonthStore';
 
 interface TableProps {
   entries: EntryProps[];
 }
 
 export function Summary({ entries }: TableProps) {
+  const {currentMonth, setCurrentMonth, currentYear} = useCurrentMonthStore()
   const { theme, setTheme } = useThemeStore();
   const [typeData, setTypeData] = useState("INCOME");
   const [income, setIncome] = useState(true);
@@ -54,6 +56,7 @@ export function Summary({ entries }: TableProps) {
     }
   }, [income, expense]);
 
+
   return (
     <div className="flex flex-col w-full gap-4">
       <header className="w-full flex justify-center items-center border-b pb-4">
@@ -92,12 +95,15 @@ export function Summary({ entries }: TableProps) {
       <div className="flex flex-wrap justify-center w-full gap-4 rounded-lg px-2 py-4">
         {entries
           .filter((entry: any) => entry.type === typeData)
+          .filter((entry: any) => entry.createdAt.slice(0, 4).includes(entry.createdAt.slice(0, 4)))
+          .filter((entry: any) => entry.createdAt.slice(6, 7).includes(currentMonth + 1))
           .map((entry: any) => (
             <CardEntry
               key={entry.id}
               date={new Intl.DateTimeFormat("pt-PT", {
                 day: "2-digit",
                 month: "short",
+                year: "numeric",
               }).format(new Date(entry?.createdAt))}
               category={entry.categories?.map((category: any) => (
                 <div key={category.id} className={`
