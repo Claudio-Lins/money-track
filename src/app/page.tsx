@@ -19,14 +19,14 @@ export default async function Home() {
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <div className="">
-            <ExpenseTotal entries={entries}/>
+            {/* <ExpenseTotal entries={entries}/> */}
           </div>
           <div className="">
-              <IncomeTotal entries={entries} />
+              {/* <IncomeTotal entries={entries} /> */}
           </div>
         </div>
         <div className="">
-          <Total  entries={entries}/>
+          {/* <Total  entries={entries}/> */}
         </div>
       </div>
     </main>
