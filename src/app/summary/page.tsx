@@ -1,15 +1,22 @@
 import { Summary } from "@/components/Summary";
 import React from "react";
+import prisma from "@/lib/prisma";
 
 export const revalidate = 10;
 
 async function getEntries() {
-  const response = await fetch(`${process.env.BASE_URL}/api/entries`,{
-    next: {
-      revalidate: 1,
+  const entries = await prisma?.entry.findMany({
+    include: {
+      categories: true,
     }
-  });
-  return response.json();
+  })
+  return entries;
+  // const response = await fetch(`${process.env.BASE_URL}/api/entries`,{
+  //   next: {
+  //     revalidate: 1,
+  //   }
+  // });
+  // return response.json();
 }
 
 export default async function Sumary() {

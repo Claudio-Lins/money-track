@@ -7,7 +7,6 @@ export interface EntryProps {
   updatedAt: Date;
   userId?: string | null;
   User?: User | null;
-  category: Category[];
 }
 
 export interface User {
