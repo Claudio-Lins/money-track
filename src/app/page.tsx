@@ -4,15 +4,21 @@ import prisma from '../lib/prisma'
 export const revalidate = 10;
 
 export default async function Home() {
-  const entries = await prisma.entry.findMany({
+  const entriesIncome = await prisma.entry.findMany({
     include: {
-      categories: true
-    },
-  });
+      categories: true,
+      },
+      where: {
+        income: false
+    }
+  })
   return (
     <main className="p-4 backdrop-blur-sm max-w-md flex justify-center items-center rounded-md bg-white/60 h-auto">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
+          <pre>
+            {JSON.stringify(entriesIncome, null, 2)}
+          </pre>
           <div className="">
             {/* <ExpenseTotal entries={entries}/> */}
           </div>
