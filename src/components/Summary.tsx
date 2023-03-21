@@ -13,30 +13,41 @@ import { useCurrentMonthStore } from '../store/currentMonthStore';
 
 interface TableProps {
   entries: EntryProps[];
+  entriesExpense: any
+  entriesIncome: any
 }
 
-export function Summary({ entries }: TableProps) {
+export function Summary({ entries, entriesExpense, entriesIncome }: TableProps) {
   const {currentMonth, setCurrentMonth, currentYear, currentDay} = useCurrentMonthStore()
   const { theme, setTheme } = useThemeStore();
   const [typeData, setTypeData] = useState("INCOME");
   const [income, setIncome] = useState(true);
   const [expense, setExpense] = useState(false);
-  const [total, setTotal] = useState(0);
+  const [totalExpenseByMonth, setTotalExpenseByMonth] = useState(0)
+  const [totalByIncomeMonth, setTotalIncomeByMonth] = useState(0)
+  const [total, setTotal] = useState(0)
   
+  const currentMonthTwoDigits = currentMonth + 1 < 10 ? `0${currentMonth + 1}` : currentMonth + 1;
 
   useEffect(() => {
-    if (typeData === "INCOME") {
+    const totalExpense = entries
+      .filter((entry) => entry.type === "EXPENSE")
+      .filter((entry: any) => new Intl.DateTimeFormat("pt-PT", {
+        month: "2-digit"
+      }).format(new Date(entry?.createdAt)).slice(0, 4).includes(String(currentMonthTwoDigits)))
+      .reduce((acc, entry) => acc + entry.amount, 0);
+      setTotalExpenseByMonth(totalExpense);
+  }, [currentMonthTwoDigits, entries, typeData]);
+
+  useEffect(() => {
       const totalIncome = entries
         .filter((entry) => entry.type === "INCOME")
+        .filter((entry: any) => new Intl.DateTimeFormat("pt-PT", {
+          month: "2-digit"
+        }).format(new Date(entry?.createdAt)).slice(0, 4).includes(String(currentMonthTwoDigits)))
         .reduce((acc, entry) => acc + entry.amount, 0);
-      setTotal(totalIncome);
-    } else {
-      const totalExpense = entries
-        .filter((entry) => entry.type === "EXPENSE")
-        .reduce((acc, entry) => acc + entry.amount, 0);
-      setTotal(totalExpense);
-    }
-  }, [entries, typeData]);
+        setTotalIncomeByMonth(totalIncome);
+  }, [currentMonthTwoDigits, entries, typeData]);
 
   function toggleTypeData() {
     setIncome(!income);
@@ -56,16 +67,14 @@ export function Summary({ entries }: TableProps) {
     }
   }, [income, expense]);
 
-  // function set two digits to currentMont
-  const currentMonthTwoDigits = currentMonth + 1 < 10 ? `0${currentMonth + 1}` : currentMonth + 1;
-  
-  
   return (
     <div className="flex flex-col w-full gap-4">
       <header className="w-full flex justify-center items-center border-b pb-4">
         <h1 className="text-5xl text-zinc-900 drop-shadow-md font-bold text-center w-11/12">
-          {priceFormatter.format(total)}{currentYear}
+          {priceFormatter.format(
+           typeData === 'EXPENSE' ? totalExpenseByMonth : totalByIncomeMonth)}
         </h1>
+        
         <div className="flex-1">
           <Calendary />
         </div>
@@ -101,7 +110,7 @@ export function Summary({ entries }: TableProps) {
           .filter((entry: any) => entry.createdAt.slice(0, 4).includes(currentYear))
           .filter((entry: any) => new Intl.DateTimeFormat("pt-PT", {
             month: "2-digit"
-          }).format(new Date(entry?.createdAt)).slice(0, 3).includes(String(currentMonthTwoDigits)))
+          }).format(new Date(entry?.createdAt)).slice(0, 4).includes(String(currentMonthTwoDigits)))
           .map((entry: any) => (
             <div key={entry.id} className="">
             <CardEntry
