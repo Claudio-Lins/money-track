@@ -14,10 +14,13 @@ export function CardEntry({
   category,
   place,
   amount,
-  arrow,
+  arrow
 }: CardEntryProps) {
   return (
-    <div className="w-full md:max-w-xs border py-2 px-4 rounded-md bg-white h-40 flex flex-col justify-between shadow-md">
+    <div className={`
+      w-full border py-2 px-4 rounded-md h-auto flex flex-col justify-between shadow-md
+      overflow-hidden
+    `}>
       <div className="">
         <div className="flex items-center justify-between border-b pb-1">
         <div className="flex items-center gap-2">
