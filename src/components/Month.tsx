@@ -4,13 +4,14 @@ import React, { useState } from "react";
 
 export function Month() {
   const [month, setMonth] = useState(new Date());
-  const {currentMonth, setCurrentMonth} = useCurrentMonthStore()
+  const { setCurrentMonth, setCurrentYear} = useCurrentMonthStore()
 
   function handleNextMonth() {
     const nextMonth = new Date(month);
     nextMonth.setMonth(month.getMonth() + 1);
     setMonth(nextMonth);
     setCurrentMonth(nextMonth.getMonth());
+    setCurrentYear(nextMonth.getFullYear());
   }
 
   function handlePreviousMonth() {
@@ -18,6 +19,7 @@ export function Month() {
     previousMonth.setMonth(month.getMonth() - 1);
     setMonth(previousMonth);
     setCurrentMonth(previousMonth.getMonth());
+    setCurrentYear(previousMonth.getFullYear());
   }
 
   // get month short string

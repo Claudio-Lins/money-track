@@ -16,7 +16,7 @@ interface TableProps {
 }
 
 export function Summary({ entries }: TableProps) {
-  const {currentMonth, setCurrentMonth, currentYear} = useCurrentMonthStore()
+  const {currentMonth, setCurrentMonth, currentYear, currentDay} = useCurrentMonthStore()
   const { theme, setTheme } = useThemeStore();
   const [typeData, setTypeData] = useState("INCOME");
   const [income, setIncome] = useState(true);
@@ -56,12 +56,15 @@ export function Summary({ entries }: TableProps) {
     }
   }, [income, expense]);
 
-
+  // function set two digits to currentMont
+  const currentMonthTwoDigits = currentMonth + 1 < 10 ? `0${currentMonth + 1}` : currentMonth + 1;
+  
+  
   return (
     <div className="flex flex-col w-full gap-4">
       <header className="w-full flex justify-center items-center border-b pb-4">
         <h1 className="text-5xl text-zinc-900 drop-shadow-md font-bold text-center w-11/12">
-          {priceFormatter.format(total)}
+          {priceFormatter.format(total)}{currentYear}
         </h1>
         <div className="flex-1">
           <Calendary />
@@ -72,19 +75,19 @@ export function Summary({ entries }: TableProps) {
           <button
             onClick={toggleTypeData}
             className={`
-         w-full px-8 py-1 transition-all duration-500
-          ${expense ? "font-bold bg-zinc-900 text-white" : ""}
-        `}
-          >
+            w-full px-8 py-1 transition-all duration-500
+            ${expense ? "font-bold bg-zinc-900 text-white" : ""}
+            `}
+            >
             EXPENSE
           </button>
           <button
             onClick={toggleTypeData}
             className={`
-        w-full px-8 py-1 transition-all duration-500
-        ${income ? "font-bold bg-zinc-900 text-white" : ""}
-      `}
-          >
+            w-full px-8 py-1 transition-all duration-500
+            ${income ? "font-bold bg-zinc-900 text-white" : ""}
+            `}
+            >
             INCOME
           </button>
         </div>
@@ -95,11 +98,13 @@ export function Summary({ entries }: TableProps) {
       <div className="flex flex-wrap justify-center w-full gap-4 rounded-lg px-2 py-4">
         {entries
           .filter((entry: any) => entry.type === typeData)
-          .filter((entry: any) => entry.createdAt.slice(0, 4).includes(entry.createdAt.slice(0, 4)))
-          .filter((entry: any) => entry.createdAt.slice(6, 7).includes(currentMonth + 1))
+          .filter((entry: any) => entry.createdAt.slice(0, 4).includes(currentYear))
+          .filter((entry: any) => new Intl.DateTimeFormat("pt-PT", {
+            month: "2-digit"
+          }).format(new Date(entry?.createdAt)).slice(0, 3).includes(String(currentMonthTwoDigits)))
           .map((entry: any) => (
+            <div key={entry.id} className="">
             <CardEntry
-              key={entry.id}
               date={new Intl.DateTimeFormat("pt-PT", {
                 day: "2-digit",
                 month: "short",
@@ -124,6 +129,7 @@ export function Summary({ entries }: TableProps) {
               }
               arrow={entry.type}
             />
+            </div>
           ))}
       </div>
     </div>
