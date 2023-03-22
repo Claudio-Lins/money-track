@@ -26,8 +26,8 @@ export function Summary({
     useCurrentMonthStore();
   const { theme, setTheme } = useThemeStore();
   const [typeData, setTypeData] = useState("INCOME");
-  const [income, setIncome] = useState(true);
-  const [expense, setExpense] = useState(false);
+  const [income, setIncome] = useState(false);
+  const [expense, setExpense] = useState(true);
   const [totalExpenseByMonth, setTotalExpenseByMonth] = useState(0);
   const [totalByIncomeMonth, setTotalIncomeByMonth] = useState(0);
   const [total, setTotal] = useState(0);
@@ -85,7 +85,7 @@ export function Summary({
 
   return (
     <div className="flex flex-col justify-between w-full gap-4">
-      <header className="w-full flex justify-around items-center border-b pb-4">
+      <header className="w-full flex flex-col md:flex-row justify-around items-center border-b pb-4">
         <div className="flex items-center border rounded-full overflow-hidden ">
           <button
             onClick={toggleTypeData}
@@ -109,7 +109,7 @@ export function Summary({
         <Month />
       </header>
       <div className="flex flex-wrap justify-between flex-col w-full h-[calc(100vh_-_265px)] overflow-hidden gap-4 rounded-lg border">
-        <div className="flex w-full items-center justify-start px-8 bg-white h-10">
+        <div className="flex w-full items-center justify-start px-8 bg-white shadow-md h-10">
           <p>Day</p>
           <p>Where</p>
           <p>Category</p>
@@ -158,7 +158,7 @@ export function Summary({
                         <p>{category.name}</p>
                       </div>
                     ))}
-                    place={entry.note}
+                    place={entry.location}
                     amount={priceFormatter.format(entry.amount)}
                     arrow={entry.type}
                   />
@@ -166,7 +166,7 @@ export function Summary({
               ))}
           </div>
         </div>
-        <footer className="flex w-full items-center justify-end  bg-white h-16 pr-8">
+        <footer className="flex w-full items-center justify-end  bg-white shadow-md h-16 pr-8">
           <h1 className="text-3xl text-zinc-900 drop-shadow-md font-bold text-center">
             {priceFormatter.format(
               typeData === "EXPENSE" ? totalExpenseByMonth : totalByIncomeMonth
