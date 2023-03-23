@@ -71,7 +71,6 @@ model Entry {
   bankAccount   String
   recurring     Recurring
   paymentMethod String
-  income        Boolean   @default(true)
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt

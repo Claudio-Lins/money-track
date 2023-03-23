@@ -6,7 +6,7 @@ export interface EntryProps {
   createdAt: Date;
   updatedAt: Date;
   userId?: string | null;
-  User?: User | null;
+  User?: User | null | undefined;
 }
 
 export interface User {

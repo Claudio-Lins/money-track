@@ -15,12 +15,14 @@ interface TableProps {
   entries: EntryProps[];
   entriesExpense: any;
   entriesIncome: any;
+  session: any;
 }
 
 export function Summary({
   entries,
   entriesExpense,
   entriesIncome,
+  session
 }: TableProps) {
   const { currentMonth, setCurrentMonth, currentYear, currentDay } =
     useCurrentMonthStore();
@@ -119,6 +121,8 @@ export function Summary({
           <div className="px-4 gap-2 flex flex-col">
             {entries
               .filter((entry: any) => entry.type === typeData)
+              // filter by current userId
+              .filter((entry: any) => entry.User?.email === session?.user?.email )
               .filter((entry: any) =>
                 entry.createdAt.slice(0, 4).includes(currentYear)
               )
@@ -158,7 +162,7 @@ export function Summary({
                         <p>{category.name}</p>
                       </div>
                     ))}
-                    place={entry.location}
+                    place={entry.User.id}
                     amount={priceFormatter.format(entry.amount)}
                     arrow={entry.type}
                   />
@@ -172,6 +176,7 @@ export function Summary({
               typeData === "EXPENSE" ? totalExpenseByMonth : totalByIncomeMonth
             )}
           </h1>
+          {session?.user?.email}
         </footer>
       </div>
     </div>

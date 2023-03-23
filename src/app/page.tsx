@@ -44,38 +44,43 @@ export default async function Home() {
         {!session ? (
           <LoginButton />
         ) : (
-          <div className="cursor-pointer flex justify-center">
+          <div className="cursor-pointer flex justify-center items-center gap-2 border-b pb-2">
             <div className="flex flex-col justify-center items-center">
-            <Image
-              className="rounded-full"
-              // @ts-ignore
-              src={session && session.user?.image}
-              alt=""
-              width={45}
-              height={45}
-            />
-            <LogoutButton />
+              <Image
+                className="rounded-full"
+                // @ts-ignore
+                src={session && session.user?.image}
+                alt=""
+                width={45}
+                height={45}
+              />
+              <LogoutButton />
             </div>
+            <strong>{session?.user?.name}</strong>
           </div>
         )}
       </header>
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <p>{session?.user?.name}</p>
-          <div className="">
-            <ExpenseTotal entriesExpense={entriesExpense} />
+      {session && (
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <div className="">
+              <ExpenseTotal entriesExpense={entriesExpense} />
+            </div>
+            <div className="">
+              <IncomeTotal entriesIncome={entriesIncome} />
+            </div>
           </div>
           <div className="">
-            <IncomeTotal entriesIncome={entriesIncome} />
+            <Total
+              entriesIncome={entriesIncome}
+              entriesExpense={entriesExpense}
+            />
           </div>
         </div>
-        <div className="">
-          <Total
-            entriesIncome={entriesIncome}
-            entriesExpense={entriesExpense}
-          />
-        </div>
-      </div>
+      )}
+      <pre>
+        {JSON.stringify(entriesIncome, null, 2)}
+      </pre>
     </main>
   );
 }
