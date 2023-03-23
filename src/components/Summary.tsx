@@ -40,6 +40,7 @@ export function Summary({
   useEffect(() => {
     const totalExpense = entries
       .filter((entry) => entry.type === "EXPENSE")
+      .filter((entry: any) => entry.User?.email === session?.user?.email )
       .filter((entry: any) =>
         new Intl.DateTimeFormat("pt-PT", {
           month: "2-digit",
@@ -50,11 +51,12 @@ export function Summary({
       )
       .reduce((acc, entry) => acc + entry.amount, 0);
     setTotalExpenseByMonth(totalExpense);
-  }, [currentMonthTwoDigits, entries, typeData]);
+  }, [currentMonthTwoDigits, entries, session?.user?.email, typeData]);
 
   useEffect(() => {
     const totalIncome = entries
       .filter((entry) => entry.type === "INCOME")
+      .filter((entry: any) => entry.User?.email === session?.user?.email )
       .filter((entry: any) =>
         new Intl.DateTimeFormat("pt-PT", {
           month: "2-digit",
@@ -65,7 +67,7 @@ export function Summary({
       )
       .reduce((acc, entry) => acc + entry.amount, 0);
     setTotalIncomeByMonth(totalIncome);
-  }, [currentMonthTwoDigits, entries, typeData]);
+  }, [currentMonthTwoDigits, entries, session?.user?.email, typeData]);
 
   function toggleTypeData() {
     setIncome(!income);
@@ -162,7 +164,7 @@ export function Summary({
                         <p>{category.name}</p>
                       </div>
                     ))}
-                    place={entry.User.id}
+                    place={entry.location}
                     amount={priceFormatter.format(entry.amount)}
                     arrow={entry.type}
                   />
@@ -176,7 +178,6 @@ export function Summary({
               typeData === "EXPENSE" ? totalExpenseByMonth : totalByIncomeMonth
             )}
           </h1>
-          {session?.user?.email}
         </footer>
       </div>
     </div>

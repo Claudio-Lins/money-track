@@ -39,12 +39,12 @@ export default async function Home() {
   });
 
   return (
-    <main className="p-4 backdrop-blur-sm md:max-w-lg w-full max-w-md flex items-center rounded-md bg-white/60 h-auto flex-col">
+    <main className="w-full backdrop-blur-sm max-w-6xl flex flex-col justify-start h-[calc(100vh_-_100px)] md:h-[calc(100vh_-_150px)] overflow-auto rounded-md bg-white/50 p-4">
       <header className="w-full flex flex-col justify-center">
         {!session ? (
           <LoginButton />
         ) : (
-          <div className="cursor-pointer flex justify-center items-center gap-2 border-b pb-2">
+          <div className="cursor-pointer flex justify-between items-center gap-2 border-b pb-2">
             <div className="flex flex-col justify-center items-center">
               <Image
                 className="rounded-full"
@@ -54,9 +54,9 @@ export default async function Home() {
                 width={45}
                 height={45}
               />
-              <LogoutButton />
-            </div>
             <strong>{session?.user?.name}</strong>
+            </div>
+              <LogoutButton />
           </div>
         )}
       </header>
@@ -78,9 +78,6 @@ export default async function Home() {
           </div>
         </div>
       )}
-      <pre>
-        {JSON.stringify(entriesIncome, null, 2)}
-      </pre>
     </main>
   );
 }
