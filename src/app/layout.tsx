@@ -3,8 +3,8 @@ import React from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
-import { AppProvider } from "@/context/AppProvider";
 import { useThemeStore } from "@/store/themeStore";
+import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata = {

@@ -1,51 +1,79 @@
-import { EntryProps } from "@/@types/EntryProps"
+import { EntryProps } from "@/@types/EntryProps";
 import { ExpenseTotal } from "@/components/ExpenseTotal";
 import { IncomeTotal } from "@/components/IncomeTotal";
 import { Total } from "@/components/Total";
-import prisma from '../lib/prisma'
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import { signOut } from "next-auth/react";
+import prisma from "../lib/prisma";
+import Image from "next/image";
+
+import { LoginButton, LogoutButton } from "./auth";
 
 export const revalidate = 10;
 
 export default async function Home() {
+  const session = await getServerSession(authOptions);
   const entriesIncome = await prisma.entry.findMany({
     where: {
       type: {
-        equals: "INCOME"
-      }
-  },
+        equals: "INCOME",
+      },
+    },
     include: {
       categories: true,
-      }
-  })
+      User: true,
+    },
+  });
 
   const entriesExpense = await prisma.entry.findMany({
     where: {
       type: {
-        equals: "EXPENSE"
-      }
-  },
+        equals: "EXPENSE",
+      },
+    },
     include: {
       categories: true,
-      }
-  })
-
+      User: true,
+    },
+  });
 
   return (
-    <main className="p-4 backdrop-blur-sm max-w-md flex justify-center items-center rounded-md bg-white/60 h-auto">
+    <main className="p-4 backdrop-blur-sm md:max-w-lg w-full max-w-md flex items-center rounded-md bg-white/60 h-auto flex-col">
+      <header className="w-full flex flex-col justify-center">
+        {!session ? (
+          <LoginButton />
+        ) : (
+          <div className="cursor-pointer flex justify-center">
+            <div className="flex flex-col justify-center items-center">
+            <Image
+              className="rounded-full"
+              // @ts-ignore
+              src={session && session.user?.image}
+              alt=""
+              width={45}
+              height={45}
+            />
+            <LogoutButton />
+            </div>
+          </div>
+        )}
+      </header>
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          {/* <pre>
-            {JSON.stringify(entriesIncome, null, 2)}
-          </pre> */}
+          <p>{session?.user?.name}</p>
           <div className="">
-            <ExpenseTotal entriesExpense={entriesExpense}/>
+            <ExpenseTotal entriesExpense={entriesExpense} />
           </div>
           <div className="">
-              <IncomeTotal entriesIncome={entriesIncome} />
+            <IncomeTotal entriesIncome={entriesIncome} />
           </div>
         </div>
         <div className="">
-          <Total entriesIncome={entriesIncome} entriesExpense={entriesExpense}/>
+          <Total
+            entriesIncome={entriesIncome}
+            entriesExpense={entriesExpense}
+          />
         </div>
       </div>
     </main>

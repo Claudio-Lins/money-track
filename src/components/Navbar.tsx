@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { List, Moon, Sun, X } from "phosphor-react";
 import { useEffect, useState } from "react";
+import { signIn, signOut } from "next-auth/react";
 
 export function Navbar({ session }: any) {
   const { theme, setTheme } = useThemeStore();
@@ -15,34 +16,6 @@ export function Navbar({ session }: any) {
   const [textColor, setTextColor] = useState("white");
   const [lgNeg, setLgNeg] = useState(false);
   const [productsPath, setProductsPath] = useState(false);
-
-  // const router = useRouter()
-  // const { slug } = router.query
-
-  // useEffect(() => {
-  //   if (router.asPath === `/products/${[slug]}` || router.asPath === '/order' || router.asPath === '/sobre') {
-  //     setTextColor('#000000')
-  //     setProductsPath(true)
-  //   } else {
-  //     setTextColor('white')
-  //     setProductsPath(false)
-  //   }
-  // }, [router.asPath, slug])
-
-  // useEffect(() => {
-  //   const changeColor = () => {
-  //     if (window.scrollY >= 90 || router.asPath === `/products/${[slug]}` ) {
-  //       setColor('#ffffff')
-  //       setTextColor('#000000')
-  //       setLgNeg(true)
-  //     } else {
-  //       setColor('transparent')
-  //       setTextColor('white')
-  //       setLgNeg(false)
-  //     }
-  //   }
-  //   window.addEventListener('scroll', changeColor)
-  // }, [router.asPath, slug])
 
   function toggleMenu() {
     setNav(!nav);
@@ -55,7 +28,7 @@ export function Navbar({ session }: any) {
       // }}
       className={`
       fixed left-0 -top-1 z-10 w-full shadow-sm duration-300 ease-in  bg-white/10 backdrop-blur-sm
-      ${ theme === "light" ? 'text-zinc-900' : 'text-white' }`}
+      ${theme === "light" ? "text-zinc-900" : "text-white"}`}
     >
       <div className="m-auto flex max-w-[1240px] items-center justify-between p-4">
         <Link href="/">
@@ -76,14 +49,18 @@ export function Navbar({ session }: any) {
             <List size={24} style={{ color: `${textColor}` }} />
           )}
         </div>
-        <div className="">
-          <button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
-            {
-              theme === 'light' ? (<Moon size={30} color='#000'/>) : (<Sun size={30} color='yellow'/>)
-            }
-          </button>
+        <div className="flex items-center gap-4">
+          <div className="">
+            <button
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            >
+              {theme === "light" ? (
+                <Moon size={30} color="#000" />
+              ) : (
+                <Sun size={30} color="yellow" />
+              )}
+            </button>
+          </div>
         </div>
         <div
           className={`
