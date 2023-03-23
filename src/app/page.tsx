@@ -9,6 +9,7 @@ import prisma from "../lib/prisma";
 import Image from "next/image";
 
 import { LoginButton, LogoutButton } from "./auth";
+import TopCards from "@/components/dashboard/TopCards";
 
 export const revalidate = 10;
 
@@ -39,8 +40,9 @@ export default async function Home() {
   });
 
   return (
+    <>
     <main className="w-full backdrop-blur-sm max-w-6xl flex flex-col justify-start h-[calc(100vh_-_100px)] md:h-[calc(100vh_-_150px)] overflow-auto rounded-md bg-white/50 p-4">
-      <header className="w-full flex flex-col justify-center">
+      <header className="w-full flex flex-col justify-center px-4">
         {!session ? (
           <LoginButton />
         ) : (
@@ -61,23 +63,15 @@ export default async function Home() {
         )}
       </header>
       {session && (
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2">
-            <div className="">
-              <ExpenseTotal entriesExpense={entriesExpense} />
-            </div>
-            <div className="">
-              <IncomeTotal entriesIncome={entriesIncome} />
-            </div>
-          </div>
-          <div className="">
-            <Total
-              entriesIncome={entriesIncome}
-              entriesExpense={entriesExpense}
-            />
-          </div>
-        </div>
+        <>
+        <TopCards
+        entriesExpense={entriesExpense}
+        entriesIncome={entriesIncome}
+        session={session}
+        />
+        </>
       )}
     </main>
-  );
+    </>
+  )
 }

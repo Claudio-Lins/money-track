@@ -5,7 +5,7 @@ interface LoginButtonProps {
 }
 
 import { signIn, signOut } from "next-auth/react";
-import { GoogleLogo } from "phosphor-react";
+import { GoogleLogo, SignOut } from "phosphor-react";
 
 export const LoginButton = () => {
   return (
@@ -20,5 +20,7 @@ export const LoginButton = () => {
 };
 
 export const LogoutButton = () => {
-  return <button className="text-sm font-bold" onClick={() => signOut()}>Sair</button>;
+  return <button className="text-base font-bold flex items-center gap-2" onClick={() => signOut()}>
+    Sair <SignOut size={24} weight='bold'/>
+    </button>;
 };
