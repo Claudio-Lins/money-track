@@ -12,7 +12,7 @@ export default function TopCards({
 }: any) {
   return (
     <div className="flex flex-wrap justify-center gap-4 p-4">
-      <div className="max-w-xs bg-white flex justify-between w-full border p- rounded-lg">
+      <div className="max-w-xs bg-white flex justify-between w-full border p-4 rounded-lg">
         <div className="flex flex-col w-full pb-4">
             <ExpenseTotal entriesExpense={entriesExpense} session={session} />
           <p className="text-red-600">Expense</p>
