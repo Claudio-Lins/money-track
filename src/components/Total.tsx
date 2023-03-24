@@ -1,25 +1,47 @@
 "use client";
-import { EntryProps } from "@/@types/EntryProps";
+import useEntryExpenseStore from "@/store/entriesExpenseStore";
+import useEntryIncomeStore from "@/store/entriesIncomeStore";
+import { priceFormatter } from "@/utils/formatter";
 import React, { useEffect, useState } from "react";
 
-export function Total({ entriesIncome, entriesExpense, session }: any) {
+export function Total({ session }: any) {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
 
+  const { entriesExpense, setEntriesExpense } = useEntryExpenseStore();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("/api/entries/entriesExpense");
+      const data = await response.json();
+      setEntriesExpense(data);
+    };
+    fetchData();
+  }, [setEntriesExpense]);
+
+  const { entriesIncome, setEntriesIncome } = useEntryIncomeStore();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("/api/entries/entriesIncome");
+      const data = await response.json();
+      setEntriesIncome(data);
+    };
+    fetchData();
+  }, [setEntriesIncome]);
+
   useEffect(() => {
     const total = entriesIncome
-    .filter((entry: any) => entry.User?.email === session?.user?.email )
-    .reduce((acc: number, entry: EntryProps) => {
-      return acc + entry?.amount;
-    }, 0);
+      .filter((entry: any) => entry.User?.email === session?.user?.email)
+      .reduce((acc: number, entry: any) => {
+        return acc + entry?.amount;
+      }, 0);
     setTotalIncome(total);
   }, [entriesIncome, session?.user?.email]);
   useEffect(() => {
     const total = entriesExpense
-    .filter((entry: any) => entry.User?.email === session?.user?.email )
-    .reduce((acc: number, entry: EntryProps) => {
-      return acc + entry?.amount;
-    }, 0);
+      .filter((entry: any) => entry.User?.email === session?.user?.email)
+      .reduce((acc: number, entry: any) => {
+        return acc + entry?.amount;
+      }, 0);
     setTotalExpense(total);
   }, [entriesExpense, session?.user?.email]);
 
@@ -33,10 +55,7 @@ export function Total({ entriesIncome, entriesExpense, session }: any) {
       ${total <= 0 ? "text-red-700" : "text-blue-700"}
       `}
       >
-        {new Intl.NumberFormat("pt-PT", {
-          style: "currency",
-          currency: "EUR",
-        }).format(total)}
+        {priceFormatter.format(total)}
       </strong>
     </div>
   );

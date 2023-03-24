@@ -11,16 +11,15 @@ interface ExpenseProps {
 }
 
 export function ExpenseTotal({ session }: any) {
-  const { entriesExpense, setEntriesExpense } = useEntryStore();
   const [totalExpense, setTotalExpense] = useState(0);
-
+  
+  const { entriesExpense, setEntriesExpense } = useEntryStore();
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/entries/entriesExpense");
       const data = await response.json();
       setEntriesExpense(data);
     };
-
     fetchData();
   }, [setEntriesExpense]);
 

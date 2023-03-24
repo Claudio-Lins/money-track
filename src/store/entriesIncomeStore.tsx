@@ -7,15 +7,15 @@ type EntryStore = {
   setEntriesIncome: (entries: EntriesProps[]) => void;
 };
 
-const useEntryStore = create<EntryStore>((set) => ({
+const useEntryIncomeStore = create<EntryStore>((set) => ({
   entriesIncome: [],
   setEntriesIncome: (entries) => set({ entriesIncome: entries }),
 }));
 
-const EntryStoreContext = createContext(useEntryStore);
+const EntryStoreContext = createContext(useEntryIncomeStore);
 
 export const useEntryStoreContext = () => useContext(EntryStoreContext);
 
 export const EntryStoreProvider = EntryStoreContext.Provider;
 
-export default useEntryStore;
+export default useEntryIncomeStore;

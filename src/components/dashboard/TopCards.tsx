@@ -6,15 +6,13 @@ import { IncomeTotal } from "../IncomeTotal";
 import { Total } from "../Total";
 
 export default function TopCards({
-  entriesExpense,
-  entriesIncome,
   session,
 }: any) {
   return (
     <div className="flex flex-wrap justify-center gap-4 p-4">
       <div className="max-w-xs bg-white flex justify-between w-full border p-4 rounded-lg">
         <div className="flex flex-col w-full pb-4">
-            <ExpenseTotal entriesExpense={entriesExpense} session={session} />
+            <ExpenseTotal session={session} />
           <p className="text-red-600">Expense</p>
         </div>
         <div className="flex justify-center items-center p-2 rounded-lg">
@@ -23,7 +21,7 @@ export default function TopCards({
       </div>
       <div className="max-w-xs bg-white flex justify-between w-full border p-4 rounded-lg">
         <div className="flex flex-col w-full pb-4">
-            <IncomeTotal entriesIncome={entriesIncome} session={session} />
+            <IncomeTotal session={session} />
           <p className="text-gray-600">Income</p>
         </div>
         <div className="flex justify-center items-center p-2 rounded-lg">
@@ -32,11 +30,7 @@ export default function TopCards({
       </div>
       <div className="max-w-xs bg-white flex justify-between w-full border p-4 rounded-lg">
         <div className="flex flex-col w-full pb-4">
-            <Total
-              entriesIncome={entriesIncome}
-              entriesExpense={entriesExpense}
-              session={session}
-            />
+            <Total session={session}/>
           <p className="text-gray-600">Balance</p>
         </div>
       </div>

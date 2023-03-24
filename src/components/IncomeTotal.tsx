@@ -6,16 +6,15 @@ import React, { useEffect, useState } from "react";
 
 
 export function IncomeTotal({ session }: any) {
-  const { entriesIncome, setEntriesIncome } = useEntryStore();
   const [totalIncome, setTotalIncome] = useState(0);
-
+  
+  const { entriesIncome, setEntriesIncome } = useEntryStore();
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/entries/entriesIncome");
       const data = await response.json();
       setEntriesIncome(data);
     };
-
     fetchData();
   }, [setEntriesIncome]);
 
