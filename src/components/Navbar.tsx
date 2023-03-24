@@ -38,6 +38,9 @@ export function Navbar({ session }: any) {
           <li className="p-4">
             <Link href="/summary">Summary</Link>
           </li>
+          <li className="p-4">
+            <Link href="/dashboard">Dashboard</Link>
+          </li>
         </ul>
         <div
           onClick={toggleMenu}
@@ -82,7 +85,13 @@ export function Navbar({ session }: any) {
               onClick={toggleMenu}
               className="p-4 text-4xl hover:text-gray-400"
             >
-              <a href="/summary">Summary</a>
+              <Link href="/summary">Summary</Link>
+            </li>
+            <li
+              onClick={toggleMenu}
+              className="p-4 text-4xl hover:text-gray-400"
+            >
+              <Link href="/dashboard">Dashboard</Link>
             </li>
           </ul>
         </div>
