@@ -81,10 +81,11 @@ model Entry {
 }
 
 model Category {
-  id      Int     @id @default(autoincrement())
+  id      Int          @id @default(autoincrement())
   name    String
-  icon    String  @default("/category/archive.svg")
-  entries Entry[] @relation("EntryCategory")
+  icon    String       @default("/category/archive.svg")
+  type    CategoryType
+  entries Entry[]      @relation("EntryCategory")
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -117,8 +118,8 @@ model Fuel {
 }
 
 enum Type {
-  INCOME
   EXPENSE
+  INCOME
 }
 
 enum FuelType {
@@ -128,6 +129,11 @@ enum FuelType {
 }
 
 enum Recurring {
-  FIXED
   VARIABLE
+  FIXED
+}
+
+enum CategoryType {
+  COMPANY
+  PERSONAL
 }

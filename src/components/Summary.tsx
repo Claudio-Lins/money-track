@@ -123,7 +123,6 @@ export function Summary({
           <div className="px-4 gap-2 flex flex-col">
             {entries
               .filter((entry: any) => entry.type === typeData)
-              // filter by current userId
               .filter((entry: any) => entry.User?.email === session?.user?.email )
               .filter((entry: any) =>
                 entry.createdAt.slice(0, 4).includes(currentYear)
@@ -141,12 +140,13 @@ export function Summary({
                   key={entry.id}
                   className={`
                   rounded-md
-                ${index % 2 === 0 ? "bg-zinc-200" : "bg-zinc-50"}
+                ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}
                 `}
                 >
                   <CardEntry
                     date={new Intl.DateTimeFormat("pt-PT", {
                       day: "2-digit",
+                      month: 'short'
                     }).format(new Date(entry?.createdAt))}
                     category={entry.categories?.map((category: any) => (
                       <div
@@ -167,6 +167,7 @@ export function Summary({
                     place={entry.location}
                     amount={priceFormatter.format(entry.amount)}
                     arrow={entry.type}
+                    metodPayment={entry.paymentMethod}
                   />
                 </div>
               ))}

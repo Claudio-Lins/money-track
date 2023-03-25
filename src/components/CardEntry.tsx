@@ -7,6 +7,7 @@ interface CardEntryProps {
   place: string;
   amount: number | string;
   arrow: string;
+  metodPayment: string
 }
 
 export function CardEntry({
@@ -14,7 +15,8 @@ export function CardEntry({
   category,
   place,
   amount,
-  arrow
+  arrow,
+  metodPayment
 }: CardEntryProps) {
   return (
     <div className={`
@@ -22,16 +24,16 @@ export function CardEntry({
       overflow-hidden
     `}>
       <div className="">
-        <div className="flex items-center justify-between border-b pb-1">
+        <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold">{date}</span>
-          {arrow === "EXPENSE" ? (
+        </div>
+        <div className="flex items-center gap-2">
+        {arrow === "EXPENSE" ? (
             <ArrowCircleDown weight="fill" size={24} color="#ff0000" />
           ) : (
             <ArrowCircleUp weight="fill" size={24} color="#00ff00" />
           )}
-        </div>
-        <div className="flex items-center gap-2">
           <button className="p-1">
             <PencilLine size={20} />
           </button>
@@ -40,12 +42,19 @@ export function CardEntry({
           </button>
         </div>
         </div>
-        <div className="flex flex-col text-xs gap-0 mt-2">
+        <div className="flex justify-center flex-col text-xs border-t border-b">
           <div className="flex flex-wrap gap-0">{category}</div>
         </div>
       </div>
-      <div className="w-full border-t pt-1 flex justify-between items-center">
-        <p className="text-sm font-bold">{place}</p>
+      <div className="w-full flex justify-between items-center">
+        <div className="flex items-center gap-2">
+        <p className="text-sm font-bold">Local: 
+          <span className="font-normal text-xs"> {place}</span>
+        </p>
+        <p className="text-sm font-bold">Metodo de Pagamento: 
+          <span className="font-normal text-xs"> {metodPayment}</span>
+        </p>
+        </div>
         <p className="text-2xl font-bold">{amount}</p>
       </div>
     </div>
