@@ -8,14 +8,13 @@ import { useRouter } from "next/router";
 import { List, Moon, Sun, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { signIn, signOut } from "next-auth/react";
+import { Navlink } from "./Navlink";
 
 export function Navbar({ session }: any) {
   const { theme, setTheme } = useThemeStore();
   const [nav, setNav] = useState(false);
   const [color, setColor] = useState("transparent");
   const [textColor, setTextColor] = useState("white");
-  const [lgNeg, setLgNeg] = useState(false);
-  const [productsPath, setProductsPath] = useState(false);
 
   function toggleMenu() {
     setNav(!nav);
@@ -23,25 +22,18 @@ export function Navbar({ session }: any) {
 
   return (
     <header
-      // style={{
-      //   backgroundColor: color,
-      // }}
       className={`
       fixed left-0 -top-1 z-10 w-full shadow-sm duration-300 ease-in  bg-white/10 backdrop-blur-sm
       ${theme === "light" ? "text-zinc-900" : "text-white"}`}
     >
       <div className="m-auto flex max-w-[1240px] items-center justify-between p-4">
         <Link href="/">
-          <p className="text-2xl font-bold">MoneyTracker</p>
+          <p className="text-2xl font-bold text-white">MoneyTracker</p>
         </Link>
-        <ul className="hidden sm:flex">
-          <li className="p-4">
-            <Link href="/summary">Summary</Link>
-          </li>
-          <li className="p-4">
-            <Link href="/dashboard">Dashboard</Link>
-          </li>
-        </ul>
+        <div className="hidden sm:flex items-center gap-4">
+          <Navlink href="/summary">Summary</Navlink>
+          <Navlink href="/dashboard">Dashboard</Navlink>
+        </div>
         <div
           onClick={toggleMenu}
           className="z-10 block cursor-pointer sm:hidden"
@@ -74,26 +66,17 @@ export function Navbar({ session }: any) {
         }
         `}
         >
-          <ul>
-            <li
-              onClick={toggleMenu}
-              className="p-4 text-4xl hover:text-gray-400"
-            >
-              <Link href="/">Home</Link>
-            </li>
-            <li
-              onClick={toggleMenu}
-              className="p-4 text-4xl hover:text-gray-400"
-            >
-              <Link href="/summary">Summary</Link>
-            </li>
-            <li
-              onClick={toggleMenu}
-              className="p-4 text-4xl hover:text-gray-400"
-            >
-              <Link href="/dashboard">Dashboard</Link>
-            </li>
-          </ul>
+          <div className="flex flex-col gap-4">
+            <Navlink onClick={toggleMenu} href="/">
+              Home
+            </Navlink>
+            <Navlink onClick={toggleMenu} href="/summary">
+              Summary
+            </Navlink>
+            <Navlink onClick={toggleMenu} href="/dashboard">
+              Dashboard
+            </Navlink>
+          </div>
         </div>
       </div>
     </header>

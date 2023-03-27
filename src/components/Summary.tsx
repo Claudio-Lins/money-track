@@ -88,7 +88,7 @@ export function Summary({
   }, [income, expense]);
 
   return (
-    <div className="flex flex-col justify-between w-full gap-4">
+    <div className="flex flex-col justify-between w-full md:gap-4">
       <header className="w-full flex flex-col md:flex-row justify-around items-center border-b pb-4">
         <div className="flex items-center border rounded-full overflow-hidden ">
           <button
@@ -112,21 +112,21 @@ export function Summary({
         </div>
         <Month />
       </header>
-      <div className="flex flex-wrap justify-between flex-col w-full h-[calc(100vh_-_265px)] overflow-hidden gap-4 rounded-lg border">
+      <div className="flex flex-wrap justify-between flex-col w-full h-[calc(100vh_-_265px)] overflow-hidden md:gap-4 gap-2 rounded-lg md:border">
         <div className="flex w-full items-center md:justify-start px-4 md:divide-x-2 bg-purple-600 text-white shadow-md h-10 justify-between">
-          <p className="font-bold text-center  md:w-[5%] ">Data</p>
-          <p className="font-bold text-center  md:w-[15%] ">Descrição</p>
-          <p className="font-bold text-center  md:w-[10%] hidden md:block ">Local</p>
-          <p className="font-bold text-center  md:w-[15%] hidden md:block ">
+          <p className="font-bold text-center text-sm md:text-base md:w-[5%] ">Data</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[15%] ">Descrição</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[10%] hidden md:block ">Local</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[15%] hidden md:block ">
             Forma Pagamento
           </p>
-          <p className="font-bold text-center  md:w-[10%] hidden md:block ">Conta</p>
-          <p className="font-bold text-center  md:w-[10%] hidden md:block ">Recorrencia</p>
-          <p className="font-bold text-center  md:w-[15%] ">Categoria</p>
-          <p className="font-bold text-center  md:w-[10%] ">Tipo</p>
-          <p className="font-bold text-center  md:w-[10%] ">Valor</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[10%] hidden md:block ">Conta</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[10%] hidden md:block ">Recorrencia</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[15%] ">Categoria</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[10%] ">Tipo</p>
+          <p className="font-bold text-center text-sm md:text-base  md:w-[10%] ">Valor</p>
         </div>
-        <div className="flex w-full md:px-4 flex-col h-auto flex-1 overflow-auto gap-1">
+        <div className="flex w-full md:px-4 flex-col h-auto flex-1 overflow-auto gap-1 items-stretch">
           {entries
             .filter((entry: any) => entry.type === typeData)
             .filter((entry: any) => entry.User?.email === session?.user?.email)
@@ -146,7 +146,7 @@ export function Summary({
                 key={entry.id}
                 className={`
           p-2 md:p-1 rounded-lg flex items-center md:divide-x-2 shadow-md justify-between md:justify-start
-          ${index % 2 === 0 ? "bg-white" : "bg-purple-200"}
+          ${index % 2 === 0 ? "bg-white" : "bg-purple-100"}
           `}
               >
                 <p className="text-xs md:w-[5%] text-center font-semibold">
@@ -176,6 +176,7 @@ export function Summary({
                     className="text-xs md:w-[15%] text-center justify-center font-semibold flex items-center gap-2"
                   >
                     <Image
+                      className="hidden md:flex"
                       src={category.icon}
                       alt={category.name}
                       width={16}

@@ -22,8 +22,8 @@ export default function Modal({isOpen, status, setStatus, children}: ModalProps)
         <div
           id='modal'
           onClick={handleModalStateChange} 
-          className='modalBg fixed inset-0 bg-zinc-900/90 z-50 flex justify-center items-center'>
-        <div className="w-full p-8 max-w-5xl flex justify-center bg-white rounded-lg">{
+          className='modalBg fixed inset-0 bg-zinc-900/90 z-[999] flex justify-center items-center px-2'>
+        <div className="w-full p-8 md:max-w-xl flex justify-center bg-white rounded-lg">{
           children
         }</div>
       </div>

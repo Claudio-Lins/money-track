@@ -62,15 +62,15 @@ model VerificationToken {
 }
 
 model Entry {
-  id            Int       @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   amount        Float
   type          Type
   notes         String?
-  description   String
+  description   String?
   location      String?
-  bankAccount   String
-  recurring     Recurring
-  paymentMethod String
+  bankAccount   String?
+  recurring     Recurring?
+  paymentMethod String?
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt

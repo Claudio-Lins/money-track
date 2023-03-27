@@ -2,6 +2,7 @@
 import { EntryProps, User } from "@/@types/EntryProps";
 import useEntryStore from "@/store/entriesIncomeStore";
 import { priceFormatter } from "@/utils/formatter";
+import { ArrowUp } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 
 
@@ -30,10 +31,11 @@ export function IncomeTotal({ session }: any) {
 
   return (
     <>
-    <div className="p-2 flex items-center">
+    <div className="p-4 flex items-center gap-2 bg-white shadow-md w-full max-w-xs justify-between rounded-lg">
       <div className=" text-green-700 text-3xl font-extrabold">
         {priceFormatter.format(totalIncome)}
       </div>
+      <ArrowUp size={24} weight="bold" color="#0fb40c" />
     </div></>
   );
 }

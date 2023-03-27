@@ -48,7 +48,7 @@ export function Total({ session }: any) {
   const total = totalIncome - totalExpense;
 
   return (
-    <div className="p-2">
+    <div className="p-4 flex items-center gap-2 bg-white shadow-md w-full max-w-xs justify-between rounded-lg">
       <strong
         className={`
       block font-extrabold text-3xl
