@@ -20,9 +20,8 @@ export default function RootLayout({
 }) {
   const { theme, setTheme } = useThemeStore();
   return (
-    <html lang="pt">
+    <html lang="pt" className={inter.className}>
       <body
-        style={inter.style}
         className={`
         w-full bg-cover bg-no-repeat bg-center bg-fixed relative flex justify-center items-start mt-20 md:mt-32
         ${
@@ -32,8 +31,8 @@ export default function RootLayout({
         }
         `}
       >
-        {children}
         <Navbar />
+        {children}
       </body>
     </html>
   );
