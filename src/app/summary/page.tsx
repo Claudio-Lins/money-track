@@ -20,8 +20,6 @@ export default async function Sumary() {
       <Summary
         entries={entries}
         session={session}
-        entriesExpense={undefined}
-        entriesIncome={undefined}
       />
       {/* <pre>
           {JSON.stringify(entries, null, 2)}

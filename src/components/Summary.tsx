@@ -1,27 +1,20 @@
 "use client";
 import { Category, EntryProps } from "@/@types/EntryProps";
 import Image from "next/image";
-import { PencilLine, Trash } from "phosphor-react";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Calendary } from "./Calendary";
-import { CardEntry } from "./CardEntry";
 import { Month } from "./Month";
 import { useThemeStore } from "@/store/themeStore";
 import { priceFormatter } from "@/utils/formatter";
 import { useCurrentMonthStore } from "../store/currentMonthStore";
 
 interface TableProps {
-  entries: EntryProps[];
-  entriesExpense: any;
-  entriesIncome: any;
-  session: any;
+  entries: EntryProps[]
+  session: any
 }
 
 export function Summary({
   entries,
-  entriesExpense,
-  entriesIncome,
   session,
 }: TableProps) {
   const { currentMonth, setCurrentMonth, currentYear, currentDay } =

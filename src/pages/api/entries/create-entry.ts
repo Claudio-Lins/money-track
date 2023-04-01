@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/lib/prisma';
 import { Entry } from '@prisma/client';
 
@@ -18,17 +19,16 @@ interface CreateEntryInput {
   };
 }
 
-export default async function createEntry(
-  input: CreateEntryInput
-): Promise<Entry> {
-  const entry = await prisma.entry.create({
-    data: {
-      ...input,
-      categories: {
-        connect: input.categories?.connect,
-      },
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const entries = await prisma.entry.create({
+    data: req.body as CreateEntryInput,
+    include: {
+      categories: true,
+      User: true,
     },
   });
-
-  return entry;
+  res.status(200).json(entries);
 }

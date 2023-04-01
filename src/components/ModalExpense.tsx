@@ -1,19 +1,24 @@
 "use client";
 
+import { useThemeStore } from "@/store/themeStore";
 import { ArrowCircleDown } from "phosphor-react";
-import { SetStateAction, useState } from "react";
+import { FormEvent, SetStateAction, useState } from "react";
 import { Button } from "./assets/Button";
 import Modal from "./Modal";
 
 interface FormData {
   amount: number | string;
-  description: string
-  location: string
-  bankAccount: string
-  recurring: string
-  paymentMethod: string
+  description: string;
+  location: string;
+  bankAccount: string;
+  recurring: string;
+  paymentMethod: string;
 }
 export default function ModalExpense() {
+  const [typeData, setTypeData] = useState("INCOME");
+  const [income, setIncome] = useState(false);
+  const [expense, setExpense] = useState(true);
+  const { theme, setTheme } = useThemeStore();
   const [modalStatus, setModalStatus] = useState(false);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
@@ -24,6 +29,37 @@ export default function ModalExpense() {
     recurring: "",
     paymentMethod: "",
   });
+
+  function createEntry() {
+    fetch(`/api/entries/create-entry`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: 110,
+        type: "INCOME",
+        notes: "Teste",
+        description: "Teste",
+        bankAccount: "WiZink",
+        recurring: "VARIABLE",
+        paymentMethod: "Cartão",
+        userId: "clfl25od500007wd8aygiy79j",
+        categories: {
+          connect: {
+            id: 2,
+          },
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log({ data }));
+  }
+
+  function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    createEntry();
+  }
 
   function stepsFunction(step: number) {
     switch (step) {
@@ -40,25 +76,15 @@ export default function ModalExpense() {
         break;
     }
   }
-// function create Entry
-  async function handleSubmmit() {
-    const data = {
-      amount: formData.amount,
-      description: formData.description,
-      location: formData.location,
-      bankAccount: formData.bankAccount,
-      recurring: formData.recurring,
-      paymentMethod: formData.paymentMethod,
-    };
-    console.log(data);
-    const response = await fetch("http://localhost:3000/api/entries/create-entry", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    const dataResponse = await response.json()
-    console.log(dataResponse)
+
+  function toggleTypeData() {
+    setIncome(!income);
+    setExpense(!expense);
+    if (income) {
+      setTheme("Expense");
+    } else {
+      setTheme("Income");
+    }
   }
 
   return (
@@ -79,11 +105,35 @@ export default function ModalExpense() {
           <div className="w-full flex justify-center items-center gap-2">
             {step === 1 && (
               <div className="w-full">
-                <h2 className="text-2xl font-bold">Despesa</h2>
+                <div className="flex items-center justify-between gap-2">
+                  <h2 className="text-3xl font-bold">Despesa</h2>
+                  <div className="">
+                    <div className="flex items-center border rounded-full overflow-hidden ">
+                      <button
+                        onClick={toggleTypeData}
+                        className={`
+            w-full px-8 py-1 transition-all duration-500 bg-white text-sm
+            ${expense ? "font-bold bg-zinc-900 text-white" : "bg-white"}
+            `}
+                      >
+                        CORPORATIVO
+                      </button>
+                      <button
+                        onClick={toggleTypeData}
+                        className={`
+            w-full px-8 py-1 transition-all duration-500 text-sm
+            ${income ? "font-bold bg-zinc-900 text-white" : "bg-white"}
+            `}
+                      >
+                        PESSOAL
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-                <form onSubmit={handleSubmmit} className="mt-4 w-full">
+                <form onSubmit={onSubmit} className="mt-4 w-full">
                   <div className="flex flex-col gap-2">
-                    <div className="flex w-full flex-col">
+                    <div className="flex w-full justify-between items-center gap-2">
                       <input
                         type="number"
                         placeholder="Valor"
@@ -94,7 +144,11 @@ export default function ModalExpense() {
                             amount: Number(e.target.value),
                           })
                         }
-                        className="w-full rounded-md border border-gray-300 p-2"
+                        className="rounded-md border border-gray-300 p-2 w-1/2"
+                        />
+                      <input
+                        type="date"
+                        className="rounded-md border border-gray-300 p-2 w-1/2"
                       />
                     </div>
                     <div className="flex w-full flex-col">
@@ -105,7 +159,7 @@ export default function ModalExpense() {
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            description: (e.target.value),
+                            description: e.target.value,
                           })
                         }
                         className="w-full rounded-md border border-gray-300 p-2"
@@ -119,7 +173,7 @@ export default function ModalExpense() {
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            location: (e.target.value),
+                            location: e.target.value,
                           })
                         }
                         className="w-full rounded-md border border-gray-300 p-2"
@@ -133,7 +187,7 @@ export default function ModalExpense() {
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            bankAccount: (e.target.value),
+                            bankAccount: e.target.value,
                           })
                         }
                         className="w-full rounded-md border border-gray-300 p-2  text-gray-500"
@@ -151,7 +205,7 @@ export default function ModalExpense() {
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            recurring: (e.target.value),
+                            recurring: e.target.value,
                           })
                         }
                         className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
@@ -170,7 +224,7 @@ export default function ModalExpense() {
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            paymentMethod: (e.target.value),
+                            paymentMethod: e.target.value,
                           })
                         }
                         className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
@@ -185,8 +239,8 @@ export default function ModalExpense() {
                 </form>
               </div>
             )}
-                </div>
-            <div className="w-full flex items-center gap-2">
+          </div>
+          <div className="w-full flex items-center gap-2">
             <Button
               onClick={() => {
                 setModalStatus(false);
@@ -197,15 +251,10 @@ export default function ModalExpense() {
             >
               <span>Cancel</span>
             </Button>
-            <Button
-              onClick={() => handleSubmmit()}
-              type="submit"
-              cor="secondary"
-              className="w-full"
-            >
+            <Button type="submit" cor="secondary" className="w-full">
               <span>Next</span>
             </Button>
-            </div>
+          </div>
         </div>
       </Modal>
     </div>
