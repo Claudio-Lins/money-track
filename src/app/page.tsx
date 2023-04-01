@@ -13,6 +13,10 @@ export const revalidate = 10;
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+
+  // const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`)
+  // const entries = await res.json()
+
   
   return (
     <>
