@@ -62,9 +62,10 @@ model VerificationToken {
 }
 
 model Entry {
-  id            Int        @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   amount        Float
   type          Type
+  typeAccount   TypeAccount
   notes         String?
   description   String?
   location      String?
@@ -81,11 +82,10 @@ model Entry {
 }
 
 model Category {
-  id      Int          @id @default(autoincrement())
+  id      Int     @id @default(autoincrement())
   name    String
-  icon    String       @default("/category/archive.svg")
-  type    CategoryType
-  entries Entry[]      @relation("EntryCategory")
+  icon    String  @default("/category/archive.svg")
+  entries Entry[] @relation("EntryCategory")
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -133,7 +133,7 @@ enum Recurring {
   FIXED
 }
 
-enum CategoryType {
-  COMPANY
-  PERSONAL
+enum TypeAccount {
+  CORPORATIVO
+  PESSOAL
 }

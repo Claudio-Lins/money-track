@@ -5,6 +5,7 @@ import { Entry } from '@prisma/client';
 interface CreateEntryInput {
   amount: number;
   type: 'INCOME' | 'EXPENSE';
+  typeAccount: 'CORPORATIVO' | 'PERSONAL';
   notes?: string;
   description?: string;
   location?: string;
@@ -24,7 +25,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const entries = await prisma.entry.create({
-    data: req.body as CreateEntryInput,
+    data: req.body as Entry,
     include: {
       categories: true,
       User: true,

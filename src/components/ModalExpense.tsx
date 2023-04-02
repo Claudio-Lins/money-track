@@ -32,7 +32,7 @@ export default function ModalExpense({ entries, session }: any) {
 
 let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j"
 
-console.log(test.split(',').filter((value, index, array) => array.indexOf(value) === index)[0]);
+// console.log(test.split(',').filter((value, index, array) => array.indexOf(value) === index)[0]);
 
   function getUserIdByEmail() {
     const userIdSession = entries
@@ -40,10 +40,8 @@ console.log(test.split(',').filter((value, index, array) => array.indexOf(value)
     .map((entry: any) => (
       entry.userId
     ))
-    // 
     return String(userIdSession).split(',').filter((value, index, array) => array.indexOf(value) === index)[0]
   }
-  console.log("UserId: " + getUserIdByEmail());
 
   function createEntry() {
     fetch(`/api/entries/create-entry`, {
@@ -52,8 +50,9 @@ console.log(test.split(',').filter((value, index, array) => array.indexOf(value)
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: 360,
+        amount: 30,
         type: "EXPENSE",
+        typeAccount: "CORPORATIVO",
         notes: "Novo",
         description: "Teste",
         bankAccount: "WiZink",
@@ -62,7 +61,7 @@ console.log(test.split(',').filter((value, index, array) => array.indexOf(value)
         userId: getUserIdByEmail(),
         categories: {
           connect: {
-            id: 2,
+            id: 8,
           },
         },
       }),
@@ -74,7 +73,7 @@ console.log(test.split(',').filter((value, index, array) => array.indexOf(value)
   function onSubmit(event: FormEvent) {
     event.preventDefault();
     createEntry();
-    alert("onSubmit");
+    setModalStatus(false)
   }
 
   function stepsFunction(step: number) {
