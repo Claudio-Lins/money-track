@@ -1,46 +1,50 @@
 "use client";
-
+import { Entry, Recurring } from "@prisma/client";
 import { useThemeStore } from "@/store/themeStore";
 import { ArrowCircleDown } from "phosphor-react";
-import { FormEvent, SetStateAction, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Button } from "./assets/Button";
 import Modal from "./Modal";
 
 interface FormData {
   amount: number | string;
-  description: string;
-  location: string;
-  bankAccount: string;
-  recurring: string;
-  paymentMethod: string;
+  typeAccount?: string;
+  notes?: string;
+  description?: string;
+  location?: string;
+  bankAccount?: string;
+  recurring?: string;
+  paymentMethod?: string;
+  createdAt?: Date;
 }
 export default function ModalExpense({ entries, session }: any) {
   const [typeData, setTypeData] = useState("INCOME");
   const [income, setIncome] = useState(false);
   const [expense, setExpense] = useState(true);
+  const [corporativo, setCorporativo] = useState(false);
+  const [pessoal, setPessoal] = useState(true);
   const { theme, setTheme } = useThemeStore();
   const [modalStatus, setModalStatus] = useState(false);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     amount: "",
+    typeAccount: "",
+    notes: "",
     description: "",
     location: "",
     bankAccount: "",
     recurring: "",
     paymentMethod: "",
+    createdAt: new Date(),
   });
-
-let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j"
-
-// console.log(test.split(',').filter((value, index, array) => array.indexOf(value) === index)[0]);
 
   function getUserIdByEmail() {
     const userIdSession = entries
-    .filter((entry: any) => entry.User?.email === session?.user?.email)
-    .map((entry: any) => (
-      entry.userId
-    ))
-    return String(userIdSession).split(',').filter((value, index, array) => array.indexOf(value) === index)[0]
+      .filter((entry: any) => entry.User?.email === session?.user?.email)
+      .map((entry: any) => entry.userId);
+    return String(userIdSession)
+      .split(",")
+      .filter((value, index, array) => array.indexOf(value) === index)[0];
   }
 
   function createEntry() {
@@ -50,14 +54,17 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: 30,
+        amount: formData.amount,
         type: "EXPENSE",
-        typeAccount: "CORPORATIVO",
-        notes: "Novo",
-        description: "Teste",
-        bankAccount: "WiZink",
-        recurring: "VARIABLE",
-        paymentMethod: "Cartão",
+        typeAccount: formData.typeAccount,
+        notes: formData.notes,
+        description: formData.description,
+        bankAccount: formData.bankAccount,
+        recurring: formData.recurring,
+        paymentMethod: formData.paymentMethod,
+        createdAt: formData.createdAt
+          ? formData.createdAt
+          : new Date().toISOString(),
         userId: getUserIdByEmail(),
         categories: {
           connect: {
@@ -73,7 +80,7 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
   function onSubmit(event: FormEvent) {
     event.preventDefault();
     createEntry();
-    setModalStatus(false)
+    setModalStatus(false);
   }
 
   function stepsFunction(step: number) {
@@ -92,13 +99,19 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
     }
   }
 
-  function toggleTypeData() {
-    setIncome(!income);
-    setExpense(!expense);
-    if (income) {
-      setTheme("Expense");
+  function toggleCorporativoPessoal() {
+    setCorporativo(!corporativo);
+    setPessoal(!pessoal);
+    if (corporativo) {
+      setFormData({
+        ...formData,
+        typeAccount: "CORPORATIVO",
+      });
     } else {
-      setTheme("Income");
+      setFormData({
+        ...formData,
+        typeAccount: "PESSOAL",
+      });
     }
   }
 
@@ -125,19 +138,19 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
                   <div className="">
                     <div className="flex items-center border rounded-full overflow-hidden ">
                       <button
-                        onClick={toggleTypeData}
+                        onClick={toggleCorporativoPessoal}
                         className={`
             w-full px-8 py-1 transition-all duration-500 bg-white text-sm
-            ${expense ? "font-bold bg-zinc-900 text-white" : "bg-white"}
+            ${pessoal ? "font-bold bg-zinc-900 text-white" : "bg-white"}
             `}
                       >
                         CORPORATIVO
                       </button>
                       <button
-                        onClick={toggleTypeData}
+                        onClick={toggleCorporativoPessoal}
                         className={`
             w-full px-8 py-1 transition-all duration-500 text-sm
-            ${income ? "font-bold bg-zinc-900 text-white" : "bg-white"}
+            ${corporativo ? "font-bold bg-zinc-900 text-white" : "bg-white"}
             `}
                       >
                         PESSOAL
@@ -163,6 +176,20 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
                       />
                       <input
                         type="date"
+                        placeholder="Data"
+                        value={
+                          formData.createdAt
+                            ? new Date(formData.createdAt)
+                                .toISOString()
+                                .split("T")[0]
+                            : new Date().toISOString().split("T")[0]
+                        }
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            createdAt: new Date(e.target.value),
+                          })
+                        }
                         className="rounded-md border border-gray-300 p-2 w-1/2"
                       />
                     </div>
@@ -226,9 +253,8 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
                         className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
                       >
                         <option value="">Recorrência</option>
-                        <option value="1">Fixa</option>
-                        <option value="2">Váriavel</option>
-                        <option value="3">...</option>
+                        <option value="FIXED">Fixa</option>
+                        <option value="VARIABLE">Váriavel</option>
                       </select>
                     </div>
                     <div className="flex w-full flex-col">
@@ -245,15 +271,13 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
                         className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
                       >
                         <option value="">Metodo de Pagamento</option>
-                        <option value="1">Crédito</option>
-                        <option value="2">Débito</option>
-                        <option value="3">Especies</option>
+                        <option value="Crédito">Crédito</option>
+                        <option value="Débito">Débito</option>
+                        <option value="Especies">Especies</option>
                       </select>
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                  >Enviar</button>
+                  <button type="submit">Enviar</button>
                 </form>
               </div>
             )}
@@ -269,11 +293,7 @@ let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd
             >
               <span>Cancel</span>
             </Button>
-            <Button
-              type={"button"}
-              cor="secondary"
-              className="w-full"
-            >
+            <Button type={"button"} cor="secondary" className="w-full">
               <span>Next</span>
             </Button>
           </div>
