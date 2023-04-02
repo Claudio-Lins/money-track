@@ -13,9 +13,10 @@ export const revalidate = 10;
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+  console.log("{session}");
 
-  // const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`)
-  // const entries = await res.json()
+  const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`)
+  const entries = await res.json()
 
   
   return (
@@ -49,8 +50,11 @@ export default async function Home() {
               <Total session={session} />
             </div>
             <div className="flex w-full justify-center items-center gap-2 mt-8">
-            <ModalExpense/>
+            <ModalExpense entries={entries} session={session}/>
             </div>
+            <pre>
+              {JSON.stringify(session, null, 2)}
+            </pre>
           </div>
         )}
       </main>

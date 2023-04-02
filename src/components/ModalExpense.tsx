@@ -14,7 +14,7 @@ interface FormData {
   recurring: string;
   paymentMethod: string;
 }
-export default function ModalExpense() {
+export default function ModalExpense({ entries, session }: any) {
   const [typeData, setTypeData] = useState("INCOME");
   const [income, setIncome] = useState(false);
   const [expense, setExpense] = useState(true);
@@ -30,6 +30,21 @@ export default function ModalExpense() {
     paymentMethod: "",
   });
 
+let test = "clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j,clfl25od500007wd8aygiy79j"
+
+console.log(test.split(',').filter((value, index, array) => array.indexOf(value) === index)[0]);
+
+  function getUserIdByEmail() {
+    const userIdSession = entries
+    .filter((entry: any) => entry.User?.email === session?.user?.email)
+    .map((entry: any) => (
+      entry.userId
+    ))
+    // 
+    return String(userIdSession).split(',').filter((value, index, array) => array.indexOf(value) === index)[0]
+  }
+  console.log("UserId: " + getUserIdByEmail());
+
   function createEntry() {
     fetch(`/api/entries/create-entry`, {
       method: "POST",
@@ -37,14 +52,14 @@ export default function ModalExpense() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: 110,
-        type: "INCOME",
-        notes: "Teste",
+        amount: 360,
+        type: "EXPENSE",
+        notes: "Novo",
         description: "Teste",
         bankAccount: "WiZink",
         recurring: "VARIABLE",
         paymentMethod: "Cartão",
-        userId: "clfl25od500007wd8aygiy79j",
+        userId: getUserIdByEmail(),
         categories: {
           connect: {
             id: 2,
@@ -59,6 +74,7 @@ export default function ModalExpense() {
   function onSubmit(event: FormEvent) {
     event.preventDefault();
     createEntry();
+    alert("onSubmit");
   }
 
   function stepsFunction(step: number) {
@@ -145,7 +161,7 @@ export default function ModalExpense() {
                           })
                         }
                         className="rounded-md border border-gray-300 p-2 w-1/2"
-                        />
+                      />
                       <input
                         type="date"
                         className="rounded-md border border-gray-300 p-2 w-1/2"
@@ -236,6 +252,9 @@ export default function ModalExpense() {
                       </select>
                     </div>
                   </div>
+                  <button
+                    type="submit"
+                  >Enviar</button>
                 </form>
               </div>
             )}
@@ -251,7 +270,11 @@ export default function ModalExpense() {
             >
               <span>Cancel</span>
             </Button>
-            <Button type="submit" cor="secondary" className="w-full">
+            <Button
+              type={"button"}
+              cor="secondary"
+              className="w-full"
+            >
               <span>Next</span>
             </Button>
           </div>
