@@ -9,13 +9,17 @@ import { List, Moon, Sun, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { Navlink } from "./Navlink";
+import { LogoutButton } from "@/app/auth";
+import LoginBtn from "./LoginBtn";
 
 export function Navbar({ session }: any) {
+  
   const { theme, setTheme } = useThemeStore();
   const [nav, setNav] = useState(false);
   const [color, setColor] = useState("transparent");
   const [textColor, setTextColor] = useState("white");
 
+  console.log('Navbar - ' );
   function toggleMenu() {
     setNav(!nav);
   }
@@ -56,6 +60,9 @@ export function Navbar({ session }: any) {
               )}
             </button>
           </div>
+          <LoginBtn>
+            <LogoutButton />
+          </LoginBtn>
         </div>
         <div
           className={`

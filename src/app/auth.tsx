@@ -20,7 +20,7 @@ export const LoginButton = () => {
 };
 
 export const LogoutButton = () => {
-  return <button className="text-base font-bold flex items-center gap-2" onClick={() => signOut()}>
-    Sair <SignOut size={24} weight='bold'/>
+  return <button className="text-sm flex items-center gap-2" onClick={() => signOut()}>
+    Sair <SignOut size={24} weight='regular'/>
     </button>;
 };

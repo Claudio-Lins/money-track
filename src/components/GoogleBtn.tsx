@@ -18,11 +18,10 @@ export function GoogleBtn({ session }: any) {
         </button>
       ) : (
         <button
-          className="flex items-center gap-2 bg-zinc-600 py-3 px-4 text-white rounded-md w-full mt-10 hover:bg-zinc-700 transition"
+          className="flex items-center gap-2 bg-zinc-600 py-3 px-4 text-white rounded-md w-full hover:bg-zinc-700 transition"
           onClick={() => signIn("google")}
         >
           <GoogleLogo size={24} />
-          <span>Entrar com Google</span>
         </button>
       )}
     </>
