@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
-  cor?: 'primary' | 'secondary' | 'tertiary'
+  cor?: 'primary' | 'secondary' | 'tertiary' | 'green'
   onClick?: () => void
   type: 'button' | 'submit' | 'reset'
   icon?: boolean
@@ -24,6 +24,7 @@ export function Button({ children, cor, onClick, type, icon, className, disabled
       ${cor === 'primary' && 'from-gray-400 to-gray-600'}
       ${cor === 'secondary' && 'from-blue-400 to-blue-600'}
       ${cor === 'tertiary' && 'from-red-400 to-red-600'}
+      ${cor === 'green' && 'from-green-400 to-green-800'}
       ${className}
       `}
     >

@@ -19,6 +19,9 @@ export default async function Home() {
   const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`)
   const entries = await res.json()
 
+  const resCategory = await fetch(`${process.env.BASE_URL}/api/categories/getAllCategories`)
+  const categories = await resCategory.json()
+
   
   return (
     <>
@@ -51,18 +54,13 @@ export default async function Home() {
               <Total session={session} />
             </div>
             <div className="flex w-full justify-center items-center gap-2 mt-8">
-            <ModalExpense entries={entries} session={session}/>
+            <ModalExpense entries={entries} session={session} categories={categories}/>
             </div>
             {/* <pre>
               {JSON.stringify(session, null, 2)}
             </pre> */}
           </div>
         )}
-        <ToggleBtn
-          labelOne="Label One"
-          labelTwo="Label Two"
-          labelPropOne={false}
-        />
       </main>
     </>
   );

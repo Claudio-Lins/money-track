@@ -7,6 +7,7 @@ import { Month } from "./Month";
 import { useThemeStore } from "@/store/themeStore";
 import { priceFormatter } from "@/utils/formatter";
 import { useCurrentMonthStore } from "../store/currentMonthStore";
+import { Entry } from "@prisma/client";
 
 interface TableProps {
   entries: EntryProps[]
@@ -123,6 +124,7 @@ export function Summary({
           {entries
             .filter((entry: any) => entry.type === typeData)
             .filter((entry: any) => entry.User?.email === session?.user?.email)
+            .filter((entry: any) => entry.amount > 0)
             .filter((entry: any) =>
               entry.createdAt.slice(0, 4).includes(currentYear)
             )

@@ -1,15 +1,16 @@
 "use client";
 import { Entry, Recurring } from "@prisma/client";
 import { useThemeStore } from "@/store/themeStore";
-import { ArrowCircleDown } from "phosphor-react";
+import { ArrowCircleDown, CurrencyEur } from "phosphor-react";
 import { FormEvent, useState } from "react";
 import { Button } from "./assets/Button";
 import Modal from "./Modal";
+import { Category } from "@prisma/client";
 
 interface FormData {
   amount: number | string;
   type: string;
-  typeAccount?: string;
+  typeAccount: string;
   notes?: string;
   description?: string;
   location?: string;
@@ -17,11 +18,19 @@ interface FormData {
   recurring?: string;
   paymentMethod?: string;
   createdAt?: Date;
+  categories: number | string
 }
-export default function ModalExpense({ entries, session }: any) {
+
+interface ModalExpenseProps {
+  entries: Entry[];
+  session: any;
+  categories: Category[]
+}
+
+export default function ModalExpense({ entries, session, categories }: ModalExpenseProps) {
   const [typeData, setTypeData] = useState("INCOME");
-  const [income, setIncome] = useState(false);
-  const [expense, setExpense] = useState(true);
+  const [expense, setExpense] = useState(false);
+  const [income, setIncome] = useState(true);
   const [corporativo, setCorporativo] = useState(false);
   const [pessoal, setPessoal] = useState(true);
   const { theme, setTheme } = useThemeStore();
@@ -38,6 +47,7 @@ export default function ModalExpense({ entries, session }: any) {
     recurring: "",
     paymentMethod: "",
     createdAt: new Date(),
+    categories: Number(0)
   });
 
   function getUserIdByEmail() {
@@ -57,8 +67,12 @@ export default function ModalExpense({ entries, session }: any) {
       },
       body: JSON.stringify({
         amount: formData.amount,
-        type: formData.type ? formData.type : "EXPENSE",
-        typeAccount: formData.typeAccount ? formData.typeAccount : "CORPORATIVO",
+        type: formData.type
+          ? formData.type
+          : "EXPENSE",
+        typeAccount: formData.typeAccount
+          ? formData.typeAccount
+          : "CORPORATIVO",
         notes: formData.notes,
         description: formData.description,
         bankAccount: formData.bankAccount,
@@ -70,7 +84,7 @@ export default function ModalExpense({ entries, session }: any) {
         userId: getUserIdByEmail(),
         categories: {
           connect: {
-            id: 8,
+            id: Number(formData.categories)
           },
         },
       }),
@@ -108,12 +122,14 @@ export default function ModalExpense({ entries, session }: any) {
       setFormData({
         ...formData,
         type: "EXPENSE",
-      });
+      })
+      console.log({expense});
     } else {
       setFormData({
         ...formData,
         type: "INCOME",
-      });
+      })
+      console.log({income});
     }
   }
 
@@ -124,74 +140,77 @@ export default function ModalExpense({ entries, session }: any) {
       setFormData({
         ...formData,
         typeAccount: "CORPORATIVO",
-      });
+      })
+      console.log({corporativo});
     } else {
       setFormData({
         ...formData,
         typeAccount: "PESSOAL",
       });
+      console.log({pessoal});
     }
   }
 
   return (
     <div className="w-full">
-      <Button
-        onClick={() => {
-          setModalStatus(true);
-        }}
-        type="button"
-        cor="tertiary"
-        className="w-full"
-      >
-        <span>Adicionar Despesa</span>
-        <ArrowCircleDown size={30} />
-      </Button>
+      <div className="w-full flex justify-center">
+        <Button
+          onClick={() => {
+            setModalStatus(true);
+          }}
+          type="button"
+          cor="green"
+          className="w-full max-w-xs"
+        >
+          <CurrencyEur size={45} weight="bold" />
+        </Button>
+      </div>
       <Modal status={modalStatus} setStatus={setModalStatus}>
         <div className="w-full flex flex-col justify-center items-center gap-2">
           <div className="w-full flex justify-center items-center gap-2">
             {step === 1 && (
               <div className="w-full">
-                <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center border rounded-full overflow-hidden ">
-                      <button
-                        onClick={toggleExpenseIncome}
-                        className={`
+                <div className="flex flex-col items-center justify-between gap-2">
+                  <div className="flex items-center border rounded-full overflow-hidden ">
+                    <button
+                      onClick={toggleExpenseIncome}
+                      className={`
             w-full px-8 py-1 transition-all duration-500 bg-white text-sm
-            ${expense ? "font-bold bg-zinc-900 text-white" : "bg-white"}
-            `}
-                      >
-                        EXPENSE
-                      </button>
-                      <button
-                        onClick={toggleExpenseIncome}
-                        className={`
-            w-full px-8 py-1 transition-all duration-500 text-sm
             ${income ? "font-bold bg-zinc-900 text-white" : "bg-white"}
             `}
-                      >
-                        INCOME
-                      </button>
-                    </div>
-                    <div className="flex items-center border rounded-full overflow-hidden ">
-                      <button
-                        onClick={toggleCorporativoPessoal}
-                        className={`
+                    >
+                      EXPENSE
+                    </button>
+                    <button
+                      onClick={toggleExpenseIncome}
+                      className={`
+            w-full px-8 py-1 transition-all duration-500 text-sm
+            ${expense ? "font-bold bg-zinc-900 text-white" : "bg-white"}
+            `}
+                    >
+                      INCOME
+                    </button>
+                  </div>
+                  <div className="flex items-center border rounded-full overflow-hidden ">
+                    <button
+                      onClick={toggleCorporativoPessoal}
+                      className={`
             w-full px-8 py-1 transition-all duration-500 bg-white text-sm
             ${pessoal ? "font-bold bg-zinc-900 text-white" : "bg-white"}
             `}
-                      >
-                        CORPORATIVO
-                      </button>
-                      <button
-                        onClick={toggleCorporativoPessoal}
-                        className={`
+                    >
+                      CORPORATIVO
+                    </button>
+                    <button
+                      onClick={toggleCorporativoPessoal}
+                      className={`
             w-full px-8 py-1 transition-all duration-500 text-sm
             ${corporativo ? "font-bold bg-zinc-900 text-white" : "bg-white"}
             `}
-                      >
-                        PESSOAL
-                      </button>
-                    </div>
+                    >
+                      PESSOAL
+                    </button>
+                  </div>
                 </div>
 
                 <form onSubmit={onSubmit} className="mt-4 w-full">
@@ -309,6 +328,25 @@ export default function ModalExpense({ entries, session }: any) {
                         <option value="Crédito">Crédito</option>
                         <option value="Débito">Débito</option>
                         <option value="Especies">Especies</option>
+                      </select>
+                    </div>
+                    <div className="flex w-full flex-col">
+                      <select
+                        name="categories"
+                        id="categories"
+                        value={formData.categories}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            categories: e.target.value,
+                          })
+                        }
+                        className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+                      >
+                        <option value="">Categoria</option>
+                        {categories?.map((category: Category) => (
+                          <option key={category.id} value={category.id}>{category.name}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
