@@ -8,6 +8,7 @@ import Modal from "./Modal";
 
 interface FormData {
   amount: number | string;
+  type: string;
   typeAccount?: string;
   notes?: string;
   description?: string;
@@ -28,6 +29,7 @@ export default function ModalExpense({ entries, session }: any) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     amount: "",
+    type: "",
     typeAccount: "",
     notes: "",
     description: "",
@@ -55,8 +57,8 @@ export default function ModalExpense({ entries, session }: any) {
       },
       body: JSON.stringify({
         amount: formData.amount,
-        type: "EXPENSE",
-        typeAccount: formData.typeAccount,
+        type: formData.type ? formData.type : "EXPENSE",
+        typeAccount: formData.typeAccount ? formData.typeAccount : "CORPORATIVO",
         notes: formData.notes,
         description: formData.description,
         bankAccount: formData.bankAccount,
@@ -99,6 +101,22 @@ export default function ModalExpense({ entries, session }: any) {
     }
   }
 
+  function toggleExpenseIncome() {
+    setExpense(!expense);
+    setIncome(!income);
+    if (expense) {
+      setFormData({
+        ...formData,
+        type: "EXPENSE",
+      });
+    } else {
+      setFormData({
+        ...formData,
+        type: "INCOME",
+      });
+    }
+  }
+
   function toggleCorporativoPessoal() {
     setCorporativo(!corporativo);
     setPessoal(!pessoal);
@@ -134,8 +152,26 @@ export default function ModalExpense({ entries, session }: any) {
             {step === 1 && (
               <div className="w-full">
                 <div className="flex items-center justify-between gap-2">
-                  <h2 className="text-3xl font-bold">Despesa</h2>
-                  <div className="">
+                    <div className="flex items-center border rounded-full overflow-hidden ">
+                      <button
+                        onClick={toggleExpenseIncome}
+                        className={`
+            w-full px-8 py-1 transition-all duration-500 bg-white text-sm
+            ${expense ? "font-bold bg-zinc-900 text-white" : "bg-white"}
+            `}
+                      >
+                        EXPENSE
+                      </button>
+                      <button
+                        onClick={toggleExpenseIncome}
+                        className={`
+            w-full px-8 py-1 transition-all duration-500 text-sm
+            ${income ? "font-bold bg-zinc-900 text-white" : "bg-white"}
+            `}
+                      >
+                        INCOME
+                      </button>
+                    </div>
                     <div className="flex items-center border rounded-full overflow-hidden ">
                       <button
                         onClick={toggleCorporativoPessoal}
@@ -156,7 +192,6 @@ export default function ModalExpense({ entries, session }: any) {
                         PESSOAL
                       </button>
                     </div>
-                  </div>
                 </div>
 
                 <form onSubmit={onSubmit} className="mt-4 w-full">

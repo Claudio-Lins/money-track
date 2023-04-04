@@ -8,6 +8,7 @@ import Image from "next/image";
 
 import { LoginButton, LogoutButton } from "./auth";
 import ModalExpense from "@/components/ModalExpense";
+import { ToggleBtn } from "@/components/assets/ToggleBtn";
 
 export const revalidate = 10;
 
@@ -52,11 +53,16 @@ export default async function Home() {
             <div className="flex w-full justify-center items-center gap-2 mt-8">
             <ModalExpense entries={entries} session={session}/>
             </div>
-            <pre>
+            {/* <pre>
               {JSON.stringify(session, null, 2)}
-            </pre>
+            </pre> */}
           </div>
         )}
+        <ToggleBtn
+          labelOne="Label One"
+          labelTwo="Label Two"
+          labelPropOne={false}
+        />
       </main>
     </>
   );
