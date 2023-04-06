@@ -16,6 +16,7 @@ export default async function Entry() {
       cache: "no-cache"
     });
   const categories = await resCategory.json();
+  
   return (
     <div className="w-full flex justify-center">
       <NewEntry

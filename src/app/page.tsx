@@ -35,6 +35,9 @@ export default async function Home() {
             <ModalExpense entries={entries} session={session} categories={categories}/>
             </div>
           </div>
+          <pre>
+            {JSON.stringify(entries, null, 2)}
+          </pre>
           </main>
         )}
       {/* <LoginBtn>
