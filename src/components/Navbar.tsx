@@ -5,21 +5,20 @@ import { useThemeStore } from "@/store/themeStore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { List, Moon, Sun, X } from "phosphor-react";
+import { CurrencyEur, List, Moon, Sun, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { Navlink } from "./Navlink";
 import { LogoutButton } from "@/app/auth";
 import LoginBtn from "./LoginBtn";
 
-export function Navbar({ session }: any) {
+export function Navbar() {
   
   const { theme, setTheme } = useThemeStore();
   const [nav, setNav] = useState(false);
   const [color, setColor] = useState("transparent");
   const [textColor, setTextColor] = useState("white");
 
-  console.log('Navbar - ' );
   function toggleMenu() {
     setNav(!nav);
   }
@@ -37,6 +36,9 @@ export function Navbar({ session }: any) {
         <div className="hidden sm:flex items-center gap-4">
           <Navlink href="/summary">Summary</Navlink>
           <Navlink href="/dashboard">Dashboard</Navlink>
+          <Navlink href="/entry">
+            <CurrencyEur size={24} weight='bold'/>
+          </Navlink>
         </div>
         <div
           onClick={toggleMenu}
@@ -73,7 +75,7 @@ export function Navbar({ session }: any) {
         }
         `}
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-center gap-4">
             <Navlink onClick={toggleMenu} href="/">
               Home
             </Navlink>
@@ -83,6 +85,9 @@ export function Navbar({ session }: any) {
             <Navlink onClick={toggleMenu} href="/dashboard">
               Dashboard
             </Navlink>
+            <Navlink onClick={toggleMenu} href="/entry">
+            <CurrencyEur size={24} weight='bold'/>
+          </Navlink>
           </div>
         </div>
       </div>

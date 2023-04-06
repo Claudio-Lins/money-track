@@ -1,8 +1,8 @@
 "use client";
 import { Entry, Recurring } from "@prisma/client";
 import { useThemeStore } from "@/store/themeStore";
-import { ArrowCircleDown, CurrencyEur } from "phosphor-react";
-import { FormEvent, useState } from "react";
+import { ArrowCircleDown, CurrencyEur, X } from "phosphor-react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "./assets/Button";
 import Modal from "./Modal";
 import { Category } from "@prisma/client";
@@ -18,16 +18,20 @@ interface FormData {
   recurring?: string;
   paymentMethod?: string;
   createdAt?: Date;
-  categories: number | string
+  categories: number | string;
 }
 
 interface ModalExpenseProps {
   entries: Entry[];
   session: any;
-  categories: Category[]
+  categories: Category[];
 }
 
-export default function ModalExpense({ entries, session, categories }: ModalExpenseProps) {
+export default function ModalExpense({
+  entries,
+  session,
+  categories,
+}: ModalExpenseProps) {
   const [typeData, setTypeData] = useState("INCOME");
   const [expense, setExpense] = useState(false);
   const [income, setIncome] = useState(true);
@@ -36,6 +40,7 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
   const { theme, setTheme } = useThemeStore();
   const [modalStatus, setModalStatus] = useState(false);
   const [step, setStep] = useState(1);
+  const [categoryName, setCategoryName] = useState("");
   const [formData, setFormData] = useState<FormData>({
     amount: "",
     type: "",
@@ -47,8 +52,23 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
     recurring: "",
     paymentMethod: "",
     createdAt: new Date(),
-    categories: Number(0)
+    categories: Number(0),
   });
+
+  // reload page
+  function refreshPage() {
+    window.location.reload();
+  }
+  useEffect(() => {
+    async function getCategories() {
+      const resCategory = await fetch(
+        `${process.env.BASE_URL}/api/categories/getAllCategories`
+      );
+      const categories = await resCategory.json();
+      console.log(categories);
+    }
+    getCategories();
+  }, [setCategoryName]);
 
   function getUserIdByEmail() {
     const userIdSession = entries
@@ -67,9 +87,7 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
       },
       body: JSON.stringify({
         amount: formData.amount,
-        type: formData.type
-          ? formData.type
-          : "EXPENSE",
+        type: formData.type ? formData.type : "EXPENSE",
         typeAccount: formData.typeAccount
           ? formData.typeAccount
           : "CORPORATIVO",
@@ -84,13 +102,30 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
         userId: getUserIdByEmail(),
         categories: {
           connect: {
-            id: Number(formData.categories)
+            id: Number(formData.categories),
           },
         },
       }),
     })
       .then((res) => res.json())
       .then((data) => console.log({ data }));
+  }
+
+  function createCategory() {
+    fetch(`/api/categories/createCategory`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: categoryName,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log({ data });
+        refreshPage();
+      });
   }
 
   function onSubmit(event: FormEvent) {
@@ -105,11 +140,11 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
         setStep(step + 1);
         break;
       case 2:
-        // setStep(step + 1)
+        setStep(step + 1);
         setModalStatus(true);
+        // handleSubmmit()
         break;
       case 3:
-      // handleSubmmit()
       default:
         break;
     }
@@ -122,14 +157,14 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
       setFormData({
         ...formData,
         type: "EXPENSE",
-      })
-      console.log({expense});
+      });
+      console.log({ expense });
     } else {
       setFormData({
         ...formData,
         type: "INCOME",
-      })
-      console.log({income});
+      });
+      console.log({ income });
     }
   }
 
@@ -140,14 +175,14 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
       setFormData({
         ...formData,
         typeAccount: "CORPORATIVO",
-      })
-      console.log({corporativo});
+      });
+      console.log({ corporativo });
     } else {
       setFormData({
         ...formData,
         typeAccount: "PESSOAL",
       });
-      console.log({pessoal});
+      console.log({ pessoal });
     }
   }
 
@@ -166,13 +201,71 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
         </Button>
       </div>
       <Modal status={modalStatus} setStatus={setModalStatus}>
-        <div className="w-full flex flex-col justify-center items-center gap-2">
+        <div className="w-full flex flex-col justify-center items-center gap-2 relative">
+          <div className="absolute -top-6 -right-6">
+            <button
+              onClick={() => setModalStatus(false)}
+              className="w-8 h-8 rounded-lg border flex justify-center items-center"
+            >
+              <X />
+            </button>
+          </div>
           <div className="w-full flex justify-center items-center gap-2">
-            {step === 1 && (
-              <div className="w-full">
-                <div className="flex flex-col items-center justify-between gap-2">
-                  <div className="flex items-center border rounded-full overflow-hidden ">
+            <form onSubmit={onSubmit} className="mt-4 w-full">
+              {step === 1 && (
+                <div>
+                  <h2 className="font-bold text-lg">Entrada de Dados</h2>
+                </div>
+              )}
+              {step === 2 && (
+                <div className="flex w-full flex-col gap-2">
+                  <span>Selecione a Categoris</span>
+                  <select
+                    name="categories"
+                    id="categories"
+                    value={formData.categories}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        categories: e.target.value,
+                      })
+                    }
+                    className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+                  >
+                    <option value="">Categoria</option>
+                    {categories?.map((category: Category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                  <span>Criar Categoria</span>
+                  <div>
+                    <input
+                      type="text"
+                      name="categories"
+                      id="categories"
+                      placeholder="Nome da Categoria"
+                      value={categoryName}
+                      onChange={(e) => setCategoryName(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+                    />
                     <button
+                      onClick={createCategory}
+                      type="button"
+                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+                    >
+                      Criar
+                    </button>
+                  </div>
+                </div>
+              )}
+              {step === 3 && <p>Step 3</p>}
+            </form>
+            {/* <div className="w-full bg-red-500">
+                 <div className="flex flex-col items-center justify-between gap-2">
+                   <div className="flex items-center border rounded-full overflow-hidden ">
+                     <button
                       onClick={toggleExpenseIncome}
                       className={`
             w-full px-8 py-1 transition-all duration-500 bg-white text-sm
@@ -350,23 +443,30 @@ export default function ModalExpense({ entries, session, categories }: ModalExpe
                       </select>
                     </div>
                   </div>
-                  <button type="submit">Enviar</button>
                 </form>
-              </div>
-            )}
+              </div> */}
           </div>
           <div className="w-full flex items-center gap-2">
+            {step > 1 && (
+              <Button
+                onClick={() => {
+                  setStep(step - 1);
+                }}
+                type="button"
+                cor="primary"
+                className="w-full"
+              >
+                <span>Volta</span>
+              </Button>
+            )}
             <Button
               onClick={() => {
-                setModalStatus(false);
+                stepsFunction(step);
               }}
-              type="button"
-              cor="primary"
+              type={"button"}
+              cor="secondary"
               className="w-full"
             >
-              <span>Cancel</span>
-            </Button>
-            <Button type={"button"} cor="secondary" className="w-full">
               <span>Next</span>
             </Button>
           </div>

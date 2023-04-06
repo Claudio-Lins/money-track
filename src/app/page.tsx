@@ -3,14 +3,10 @@ import { IncomeTotal } from "@/components/IncomeTotal";
 import { Total } from "@/components/Total";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
-
-import { LoginButton, LogoutButton } from "./auth";
 import ModalExpense from "@/components/ModalExpense";
-import { ToggleBtn } from "@/components/assets/ToggleBtn";
-import LoginBtn from "@/components/LoginBtn";
 
 export const revalidate = 10;
+
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -20,8 +16,9 @@ export default async function Home() {
   const entries = await res.json();
 
   const resCategory = await fetch(
-    `${process.env.BASE_URL}/api/categories/getAllCategories`
-  );
+    `${process.env.BASE_URL}/api/categories/getAllCategories`, {
+      cache: "no-cache"
+    });
   const categories = await resCategory.json();
 
   return (

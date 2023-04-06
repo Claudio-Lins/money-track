@@ -15,7 +15,7 @@ export function Navlink({href, onClick, children }: NavlinkProps) {
     <Link
       onClick={onClick}
       data-active={activeHref === href}
-      className='px-4 py-2 rounded-md hover:bg-cyan-200 dark:hover:bg-cyan-700 transition duration-300 ease-in-out data-[active=true]:bg-cyan-400' 
+      className='px-4 py-2 mx-auto rounded-md hover:bg-cyan-200 dark:hover:bg-cyan-700 transition duration-300 ease-in-out data-[active=true]:bg-cyan-400' 
       href={href}>
       {children}
     </Link>
