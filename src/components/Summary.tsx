@@ -86,7 +86,7 @@ export function Summary({
   }, [income, expense]);
 
   return (
-    <div className="flex flex-col justify-between w-full md:gap-4">
+    <div className="flex flex-col justify-between w-full md:gap-4 mt-4">
       <header className="w-full flex flex-col md:flex-row justify-around items-center border-b pb-4">
         <div className="flex items-center border rounded-full overflow-hidden ">
           <button

@@ -62,9 +62,10 @@ export function Navbar() {
               )}
             </button>
           </div>
-          <LoginBtn>
+          {/* @ts-ignore */}
             <LogoutButton />
-          </LoginBtn>
+          {/* <LoginBtn>
+          </LoginBtn> */}
         </div>
         <div
           className={`
