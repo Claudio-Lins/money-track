@@ -1,8 +1,6 @@
-import { Summary } from "@/components/Summary";
 import React from "react";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
-import { Entry } from "@prisma/client";
 import { Transactions } from "@/components/Transactions";
 
 export default async function Sumary() {
@@ -13,17 +11,12 @@ export default async function Sumary() {
   });
   const entries = await res.json();
 
-
   return (
     <div className="w-full backdrop-blur-sm max-w-6xl flex justify-center mt-8  overflow-auto rounded-md bg-white/50 py-4">
       <Transactions
       entries={entries}
       session={session}
       />
-      {/* <Summary
-        entries={entries}
-        session={session}
-      /> */}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { Category, Entry } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Plus } from "phosphor-react";
 import React, { FormEvent, useEffect, useState } from "react";
 import Modal from "./Modal";
 
@@ -199,7 +200,7 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
 
 
   return (
-    <div className="w-full md:max-w-5xl h-auto mt-10 md:mt-10 mx-auto bg-white px-4 md:px-8 pb-4 backdrop-blur-sm rounded-xl shadow-lg">
+    <div className="w-full md:max-w-5xl h-auto mt-10 md:mt-10 mx-auto bg-white px-4 md:px-8 pb-12 backdrop-blur-sm rounded-xl shadow-lg">
       <header className="flex flex-col gap-2 md:flex-row w-full items-center justify-between border-b py-6 ">
         <div className="">
           <h2 className="text-2xl font-bold w-full max-w-sm text-zinc-800">
@@ -280,7 +281,7 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
           <div className="w-full md:w-1/2 flex flex-col gap-4 px-2">
             <div className="flex w-full justify-between items-center gap-2">
               <input
-                type="number"
+                type="tel"
                 placeholder="Valor"
                 value={formData.amount}
                 onChange={(e) =>
@@ -437,25 +438,25 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
                   ))}
                 </div>
               </div>
-            </fieldset>
 
             <div className="w-full mt-4">
               <button
                 onClick={() => setModalStatus(true)}
                 type="button"
-                className="w-full bg-zinc-900 text-zinc-100 px-4 py-2 rounded-md"
-              >
-                Criar Categoria
+                className=" bg-zinc-900 text-zinc-100 px-4 py-2 rounded-md"
+                >
+                <Plus weight="bold" size={20}/>
               </button>
             </div>
+                </fieldset>
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-center mt-6 md:mt-10">
           <button
             type="submit"
-            className="bg-zinc-900 text-zinc-100 px-4 py-2 rounded-md"
+            className="bg-zinc-900 w-full max-w-xs text-zinc-100 px-4 py-3 rounded-md"
           >
-            Save
+            Salvar
           </button>
         </div>
       </form>
