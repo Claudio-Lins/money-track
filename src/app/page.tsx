@@ -6,7 +6,7 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import ModalExpense from "@/components/ModalExpense";
 
-export const revalidate = 10;
+export const revalidate = 1;
 
 
 export default async function Home() {
@@ -86,6 +86,7 @@ export default async function Home() {
           </div>
         )}
       </main> */}
+     
     </>
   );
 }

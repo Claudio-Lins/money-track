@@ -4,6 +4,7 @@ import { Category } from '@prisma/client';
 
 interface CreateCategoryInput {
     name: string;
+    icon: string
 }
 
 export default async function handler(

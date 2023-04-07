@@ -7,7 +7,8 @@ import { Month } from "./Month";
 import { useThemeStore } from "@/store/themeStore";
 import { priceFormatter } from "@/utils/formatter";
 import { useCurrentMonthStore } from "../store/currentMonthStore";
-import { Entry } from "@prisma/client";
+
+import { useRouter } from "next/navigation";
 
 interface TableProps {
   entries: EntryProps[]
@@ -31,6 +32,8 @@ export function Summary({
   const currentMonthTwoDigits =
     currentMonth + 1 < 10 ? `0${currentMonth + 1}` : currentMonth + 1;
 
+    const router = useRouter();
+
   useEffect(() => {
     const totalExpense = entries
       .filter((entry) => entry.type === "EXPENSE")
@@ -45,7 +48,8 @@ export function Summary({
       )
       .reduce((acc, entry) => acc + entry.amount, 0);
     setTotalExpenseByMonth(totalExpense);
-  }, [currentMonthTwoDigits, entries, session?.user?.email, typeData]);
+    router.refresh();
+  }, [currentMonthTwoDigits, entries, router, session?.user?.email, typeData]);
 
   useEffect(() => {
     const totalIncome = entries
@@ -172,7 +176,7 @@ export function Summary({
                   >
                     <Image
                       className="hidden md:flex"
-                      src={category.icon}
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL_ICON}/category-icon/${category.icon}`}
                       alt={category.name}
                       width={16}
                       height={16}

@@ -8,12 +8,14 @@ export default async function Entry() {
   const session = await getServerSession(authOptions);
   console.log("{session}");
 
-  const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
+  const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`, {
+    cache: 'no-cache'
+  });
   const entries = await res.json();
 
   const resCategory = await fetch(
     `${process.env.BASE_URL}/api/categories/getAllCategories`, {
-      cache: "reload"
+     cache: 'no-cache'
     });
   const categories = await resCategory.json();
 

@@ -24,7 +24,7 @@ export function Navbar() {
   }
 
   return (
-    <header
+    <div
       className={`
       fixed left-0 -top-1 z-10 w-full shadow-sm duration-300 ease-in  bg-white/10 backdrop-blur-sm
       ${theme === "light" ? "text-zinc-900" : "text-white"}`}
@@ -91,6 +91,6 @@ export function Navbar() {
           </div>
         </div>
       </div>
-    </header>
+    </div>
   );
 }

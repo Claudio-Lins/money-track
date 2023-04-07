@@ -1,6 +1,10 @@
 "use client";
+import { supabase } from "@/lib/supabase";
 import { Category, Entry } from "@prisma/client";
-import React, { FormEvent, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { FormEvent, useEffect, useState } from "react";
+import Modal from "./Modal";
 
 interface NewEntryProps {
   entries: Entry[];
@@ -22,12 +26,15 @@ interface FormDataProps {
   categories: number | string;
 }
 
-export function NewEntry({ categories, entries, session }: NewEntryProps) {
+export function NewEntry({ categories,  entries, session }: NewEntryProps) {
   const [expense, setExpense] = useState(false);
+  const [modalStatus, setModalStatus] = useState(false);
   const [income, setIncome] = useState(true);
   const [corporativo, setCorporativo] = useState(false);
   const [pessoal, setPessoal] = useState(true);
   const [categoryName, setCategoryName] = useState("");
+  const [categoryIcon, setCategoryIcon] = useState([])
+  const [categoryIconName, setCategoryIconName] = useState("")
   const [formData, setFormData] = useState<FormDataProps>({
     amount: "",
     type: "",
@@ -42,6 +49,9 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
     categories: Number(0),
   });
 
+  const router = useRouter();
+ 
+
   function getUserIdByEmail() {
     const userIdSession = entries
       .filter((entry: any) => entry.User?.email === session?.user?.email)
@@ -49,6 +59,11 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
     return String(userIdSession)
       .split(",")
       .filter((value, index, array) => array.indexOf(value) === index)[0];
+  }
+
+  // link to page
+  function handleLinkToPage() {
+    router.push("/summary");
   }
 
   function createEntry() {
@@ -81,6 +96,7 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
     })
       .then((res) => res.json())
       .then((data) => console.log({ data }));
+      handleLinkToPage()
   }
 
   function createCategory() {
@@ -91,11 +107,13 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
       },
       body: JSON.stringify({
         name: categoryName,
+        icon: categoryIconName,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log({ data });
+        router.refresh();
+        setModalStatus(false);
       });
   }
 
@@ -130,18 +148,58 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
         ...formData,
         typeAccount: "CORPORATIVO",
       });
-      console.log({ corporativo });
     } else {
       setFormData({
         ...formData,
         typeAccount: "PESSOAL",
       });
-      console.log({ pessoal });
     }
   }
 
+  // upload file
+ async function uploadFile(event: any) {
+  let file = event.target.files[0]
+
+  const { data, error } = await supabase
+    .storage
+    .from('category-icon')
+    .upload(`category-icon/${file.name}`, file)
+
+  if (data) {
+    let name = file.name
+   setCategoryIconName(name)
+    console.log('File uploaded successfully!')
+    console.log(categoryIconName);
+
+  } else {
+    console.log('Error uploading file: ', error.message)
+  }
+ }
+
+  // get category icon
+  async function getCategoryIcon() {
+    const { data, error } = await supabase
+      .storage
+      .from('category-icon')
+      .list(
+        'category-icon',
+        {
+          limit: 100,
+          offset: 0,
+        }
+      )
+
+    if (data) {
+      console.log({data});
+    } else {
+      console.log('Error getting files: ', error.message)
+    }
+  }
+
+
+
   return (
-    <div className="w-full max-w-sm md:max-w-5xl mt-10 md:mt-0 mx-auto bg-white/50 px-4 md:px-8 pb-4 backdrop-blur-sm rounded-xl shadow-lg">
+    <div className="w-full md:max-w-5xl h-auto mt-10 md:mt-10 mx-auto bg-white px-4 md:px-8 pb-4 backdrop-blur-sm rounded-xl shadow-lg">
       <header className="flex flex-col gap-2 md:flex-row w-full items-center justify-between border-b py-6 ">
         <div className="">
           <h2 className="text-2xl font-bold w-full max-w-sm text-zinc-800">
@@ -338,47 +396,58 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
             </div>
           </div>
           <div className="w-full md:w-1/2 flex flex-col justify-between gap-4 px-4">
-            
-              <fieldset className="border p-2">
-                <legend className="text-zinc-800 text-xl font-bold">Categoria</legend>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-start flex-wrap gap-2">
-                    {categories.map((category: Category) => (
-                      <div
-                        key={category.id}
-                        className="flex items-center gap-2 border p-2 rounded-lg bg-zinc-50 cursor-pointer"
-                      >
-                        <input
-                          type="radio"
-                          name="category"
-                          value={category.id}
-                          id={category.name}
-                          checked={formData.categories === category.id}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              categories: e.target.value,
-                            })
-                          }
-                        />
-                        <label
-                          htmlFor={category.name}
+            <fieldset className="border p-2">
+              <legend className="text-zinc-800 text-xl font-bold">
+                Categoria
+              </legend>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-start flex-wrap gap-2">
+                  {categories.map((category: Category) => (
+                    <div
+                      key={category.id}
+                      className="flex items-center gap-2 border p-2 rounded-lg bg-zinc-50 cursor-pointer"
+                    >
+                      <input
+                        type="radio"
+                        name="category"
+                        value={category.id}
+                        id={category.name}
+                        checked={formData.categories === category.id}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            categories: e.target.value,
+                          })
+                        }
+                      />
+                      <label 
+                        htmlFor={category.name}
+                        className='flex items-center gap-2'
                         >
-                          {category.name}</label>
-                      </div>
-                    ))}
-                  </div>
+                        <Image
+                      className="hidden md:flex"
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL_ICON}/category-icon/${category.icon}`}
+                      alt={category.name}
+                      width={16}
+                      height={16}
+                    />
+                    <p>{category.name}</p>
+                      </label>
+                    </div>
+                  ))}
                 </div>
-              </fieldset>
-              <div className="w-full mt-4">
-                <button
-                  type="button"
-                  className="w-full bg-zinc-900 text-zinc-100 px-4 py-2 rounded-md"
-                >
-                  Criar Categoria
-                </button>
               </div>
-           
+            </fieldset>
+
+            <div className="w-full mt-4">
+              <button
+                onClick={() => setModalStatus(true)}
+                type="button"
+                className="w-full bg-zinc-900 text-zinc-100 px-4 py-2 rounded-md"
+              >
+                Criar Categoria
+              </button>
+            </div>
           </div>
         </div>
         <div className="flex justify-end">
@@ -390,6 +459,35 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
           </button>
         </div>
       </form>
+      <Modal 
+        status={modalStatus} 
+        setStatus={setModalStatus}
+        className='bg-zinc-50'
+        >
+        <div className="flex flex-col gap-2">
+                    <input
+                      type="text"
+                      name="categories"
+                      id="categories"
+                      placeholder="Nome da Categoria"
+                      value={categoryName}
+                      onChange={(e) => setCategoryName(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+                    />
+                    <input
+                      type="file"
+                      onChange={(event) => uploadFile(event)}
+                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+                    />
+                    <button
+                      onClick={createCategory}
+                      type="button"
+                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+                    >
+                      Criar
+                    </button>
+                  </div>
+      </Modal>
     </div>
   );
 }
