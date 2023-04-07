@@ -1,3 +1,4 @@
+
 import { ExpenseTotal } from "@/components/ExpenseTotal";
 import { IncomeTotal } from "@/components/IncomeTotal";
 import { Total } from "@/components/Total";
@@ -10,16 +11,14 @@ export const revalidate = 10;
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  console.log("{session}");
+  // console.log("{session}");
 
-  const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
-  const entries = await res.json();
+  // const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
+  // const entries = await res.json();
 
-  const resCategory = await fetch(
-    `${process.env.BASE_URL}/api/categories/getAllCategories`, {
-      cache: "no-cache"
-    });
-  const categories = await resCategory.json();
+  // const resCategory = await fetch(
+  //   `${process.env.BASE_URL}/api/categories/getAllCategories`);
+  // const categories = await resCategory.json();
 
   return (
     <>
@@ -32,12 +31,9 @@ export default async function Home() {
               <Total session={session} />
             </div>
             <div className="flex w-full justify-center items-center gap-2 mt-8">
-            <ModalExpense entries={entries} session={session} categories={categories}/>
+            {/* <ModalExpense entries={entries} session={session} categories={categories}/> */}
             </div>
           </div>
-          <pre>
-            {JSON.stringify(entries, null, 2)}
-          </pre>
           </main>
         )}
       {/* <LoginBtn>

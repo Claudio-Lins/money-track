@@ -1,6 +1,8 @@
 "use client";
 import { Category, EntryProps, User } from "@/@types/EntryProps";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { priceFormatter } from "@/utils/formatter";
+import { getServerSession } from "next-auth";
 import { ArrowDown } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import useEntryStore from "../store/entriesExpenseStore";
@@ -11,13 +13,13 @@ interface ExpenseProps {
   User: User | null;
 }
 
-export function ExpenseTotal({ session }: any) {
+export function ExpenseTotal({session}: any) {
   const [totalExpense, setTotalExpense] = useState(0);
   
   const { entriesExpense, setEntriesExpense } = useEntryStore();
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/entries/entriesExpense");
+      const response = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
       const data = await response.json();
       setEntriesExpense(data);
     };

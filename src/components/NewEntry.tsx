@@ -346,12 +346,13 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
                     {categories.map((category: Category) => (
                       <div
                         key={category.id}
-                        className="flex items-center gap-2 border p-2 rounded-lg bg-zinc-50"
+                        className="flex items-center gap-2 border p-2 rounded-lg bg-zinc-50 cursor-pointer"
                       >
                         <input
                           type="radio"
                           name="category"
                           value={category.id}
+                          id={category.name}
                           checked={formData.categories === category.id}
                           onChange={(e) =>
                             setFormData({
@@ -360,7 +361,10 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
                             })
                           }
                         />
-                        <label>{category.name}</label>
+                        <label
+                          htmlFor={category.name}
+                        >
+                          {category.name}</label>
                       </div>
                     ))}
                   </div>

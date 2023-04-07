@@ -13,10 +13,10 @@ export default async function Entry() {
 
   const resCategory = await fetch(
     `${process.env.BASE_URL}/api/categories/getAllCategories`, {
-      cache: "no-cache"
+      cache: "reload"
     });
   const categories = await resCategory.json();
-  
+
   return (
     <div className="w-full flex justify-center">
       <NewEntry

@@ -12,7 +12,7 @@ export function IncomeTotal({ session }: any) {
   const { entriesIncome, setEntriesIncome } = useEntryStore();
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/entries/entriesIncome");
+      const response = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
       const data = await response.json();
       setEntriesIncome(data);
     };
