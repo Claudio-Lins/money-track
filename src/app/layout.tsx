@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="pt" className={inter.className}>
       <body
         className={`
-        w-full bg-cover bg-no-repeat bg-center bg-fixed relative flex justify-center items-start mt-20
+        w-full bg-cover bg-no-repeat bg-center bg-fixed relative flex justify-center items-start
         ${
           theme === "light"
             ? 'bg-[url("/theme/light.jpeg")]'

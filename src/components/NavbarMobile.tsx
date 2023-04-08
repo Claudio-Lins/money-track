@@ -5,7 +5,7 @@ import { CurrencyEur, Gauge, House, ListChecks } from "phosphor-react";
 
 export function NavbarMobile() {
   return (
-    <div className="fixed bottom-0 p-2 w-full bg-white/20 backdrop-blur md:hidden">
+    <div className="fixed z-10 bottom-0 p-2 w-full bg-white/20 backdrop-blur md:hidden">
       <div className="flex justify-center items-center gap-4">
         <Link
           href="/"

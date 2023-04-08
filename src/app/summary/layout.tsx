@@ -9,7 +9,7 @@ export default function LayoutEntry({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full h-auto md:mt-20">
+    <div className="w-full h-auto md:mt-20 flex justify-center">
       {children}
     </div>
   );
