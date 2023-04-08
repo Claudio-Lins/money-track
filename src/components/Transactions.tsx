@@ -8,7 +8,7 @@ import { useThemeStore } from "@/store/themeStore";
 import { priceFormatter } from "@/utils/formatter";
 import { useCurrentMonthStore } from "../store/currentMonthStore";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash } from "phosphor-react";
+import { Eye, Pencil, Trash } from "phosphor-react";
 import { Th } from "./table/Th";
 import { Td } from "./table/Td";
 
@@ -93,6 +93,11 @@ export function Transactions({ entries, session }: TableProps) {
       method: "DELETE",
     });
   }
+
+  function handleOpenReceip() {
+    console.log("open");
+  }
+
 
   function handleEdit() {
     console.log("edit");
@@ -205,6 +210,16 @@ export function Transactions({ entries, session }: TableProps) {
                   </Td>
                   <Td className="md:text-lg text-[10px] font-medium">
                     <div className="flex justify-center gap-2 items-center">
+                     {entry.file && (
+                       <a
+                        href={`${process.env.NEXT_PUBLIC_SUPABASE_URL_RECEIP}/${entry.file}`}
+                        target="_blank"
+                        rel="noreferrer"
+                       className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-700 dark:hover:text-zinc-300"
+                     >
+                       <Eye />
+                     </a>
+                     )}
                       <button
                         onClick={() => handleEdit()}
                         className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-700 dark:hover:text-zinc-300"
