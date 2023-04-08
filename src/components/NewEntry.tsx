@@ -114,6 +114,7 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
       .then((res) => res.json())
       .then((data) => {
         router.refresh();
+        setCategoryName('')
         setModalStatus(false);
       });
   }
@@ -406,7 +407,7 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
                   {categories.map((category: Category) => (
                     <div
                       key={category.id}
-                      className="flex items-center gap-2 border p-2 rounded-lg bg-zinc-50 cursor-pointer"
+                      className="flex items-center gap-2 border p-2 rounded-lg bg-zinc-400 text-zinc-100 cursor-pointer"
                     >
                       <input
                         type="radio"
