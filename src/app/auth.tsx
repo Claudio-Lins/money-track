@@ -5,7 +5,7 @@ interface LoginButtonProps {
 }
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { GoogleLogo, SignOut } from "phosphor-react";
+import { GoogleLogo, SignIn, SignOut } from "phosphor-react";
 import Image from "next/image";
 
 // export const LoginButton = () => {
@@ -44,5 +44,32 @@ export const LogoutButton = () => {
         </div>
       )}
     </button>
+  );
+};
+
+export const LogoutButtonMobile = () => {
+  const { data: session } = useSession();
+  return (
+    <>
+      {session ? (
+        <button
+          className="text-sm flex items-center gap-2"
+          onClick={() => signOut()}
+        >
+          <div className="flex justify-center items-center p-2 bg-zinc-500 rounded-full">
+            <SignOut size={24} weight="regular" color="#ffffff" />
+          </div>
+        </button>
+      ) : (
+        <button
+          className="text-sm flex items-center gap-2"
+          onClick={() => signIn('google')}
+        >
+          <div className="flex justify-center items-center p-2 bg-zinc-500 rounded-full">
+            <SignIn size={24} weight="regular" color="#ffffff" />
+          </div>
+        </button>
+      )}
+    </>
   );
 };
