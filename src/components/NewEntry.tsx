@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { Category, Entry } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Plus } from "phosphor-react";
+import { Plus, Receipt } from "phosphor-react";
 import React, { FormEvent, useEffect, useState } from "react";
 import Modal from "./Modal";
 
@@ -18,6 +18,7 @@ interface FormDataProps {
   type: string;
   typeAccount: string;
   notes?: string;
+  file?: string;
   description?: string;
   location?: string;
   bankAccount?: string;
@@ -27,20 +28,22 @@ interface FormDataProps {
   categories: number | string;
 }
 
-export function NewEntry({ categories,  entries, session }: NewEntryProps) {
+export function NewEntry({ categories, entries, session }: NewEntryProps) {
   const [expense, setExpense] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
   const [income, setIncome] = useState(true);
   const [corporativo, setCorporativo] = useState(false);
   const [pessoal, setPessoal] = useState(true);
   const [categoryName, setCategoryName] = useState("");
-  const [categoryIcon, setCategoryIcon] = useState([])
-  const [categoryIconName, setCategoryIconName] = useState("")
+  const [categoryIcon, setCategoryIcon] = useState([]);
+  const [receiptName, setReceiptName] = useState("");
+  const [categoryIconName, setCategoryIconName] = useState("");
   const [formData, setFormData] = useState<FormDataProps>({
     amount: "",
     type: "",
     typeAccount: "",
     notes: "",
+    file: "",
     description: "",
     location: "",
     bankAccount: "",
@@ -51,7 +54,6 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
   });
 
   const router = useRouter();
- 
 
   function getUserIdByEmail() {
     const userIdSession = entries
@@ -80,6 +82,7 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
           ? formData.typeAccount
           : "CORPORATIVO",
         notes: formData.notes,
+        file: receiptName,
         description: formData.description,
         bankAccount: formData.bankAccount,
         recurring: formData.recurring,
@@ -97,7 +100,7 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
     })
       .then((res) => res.json())
       .then((data) => console.log({ data }));
-      handleLinkToPage()
+    handleLinkToPage();
   }
 
   function createCategory() {
@@ -114,7 +117,7 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
       .then((res) => res.json())
       .then((data) => {
         router.refresh();
-        setCategoryName('')
+        setCategoryName("");
         setModalStatus(false);
       });
   }
@@ -159,46 +162,39 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
   }
 
   // upload file
- async function uploadFile(event: any) {
-  let file = event.target.files[0]
+  async function uploadFile(event: any) {
+    let file = event.target.files[0];
 
-  const { data, error } = await supabase
-    .storage
-    .from('category-icon')
-    .upload(`category-icon/${file.name}`, file)
-
-  if (data) {
-    let name = file.name
-   setCategoryIconName(name)
-    console.log('File uploaded successfully!')
-    console.log(categoryIconName);
-
-  } else {
-    console.log('Error uploading file: ', error.message)
-  }
- }
-
-  // get category icon
-  async function getCategoryIcon() {
-    const { data, error } = await supabase
-      .storage
-      .from('category-icon')
-      .list(
-        'category-icon',
-        {
-          limit: 100,
-          offset: 0,
-        }
-      )
+    const { data, error } = await supabase.storage
+      .from("category-icon")
+      .upload(`category-icon/${file.name}`, file);
 
     if (data) {
-      console.log({data});
+      let name = file.name;
+      setCategoryIconName(name);
+      console.log("File uploaded successfully!");
+      console.log(categoryIconName);
     } else {
-      console.log('Error getting files: ', error.message)
+      console.log("Error uploading file: ", error.message);
     }
   }
 
+  async function uploadReceipt(event: any) {
+    let receipt = event.target.files[0];
 
+    const { data, error } = await supabase.storage
+      .from("receipt")
+      .upload(`${receipt.name}`, receipt);
+
+    if (data) {
+      let name = receipt.name;
+      setReceiptName(name);
+      console.log("File uploaded successfully!");
+      console.log(receiptName);
+    } else {
+      console.log("Error uploading file: ", error.message);
+    }
+  }
 
   return (
     <div className="w-full md:max-w-5xl h-auto mt-10 md:mt-10 mx-auto bg-white px-4 md:px-8 pb-12 backdrop-blur-sm rounded-xl shadow-lg">
@@ -396,6 +392,17 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
                 <option value="VARIABLE">Váriavel</option>
               </select>
             </div>
+            <div className="flex gap-2 items-center">
+              <label htmlFor="">
+                <Receipt size={30}/>
+              </label>
+              <input
+                type="file"
+                onChange={(event) => uploadReceipt(event)}
+                className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+              />
+
+            </div>
           </div>
           <div className="w-full md:w-1/2 flex flex-col justify-between gap-4 px-4">
             <fieldset className="border p-2">
@@ -422,34 +429,34 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
                           })
                         }
                       />
-                      <label 
+                      <label
                         htmlFor={category.name}
-                        className='flex items-center gap-2'
-                        >
+                        className="flex items-center gap-2"
+                      >
                         <Image
-                      className="hidden md:flex"
-                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL_ICON}/category-icon/${category.icon}`}
-                      alt={category.name}
-                      width={16}
-                      height={16}
-                    />
-                    <p>{category.name}</p>
+                          className="hidden md:flex"
+                          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL_ICON}/category-icon/${category.icon}`}
+                          alt={category.name}
+                          width={16}
+                          height={16}
+                        />
+                        <p>{category.name}</p>
                       </label>
                     </div>
                   ))}
                 </div>
               </div>
 
-            <div className="w-full mt-4">
-              <button
-                onClick={() => setModalStatus(true)}
-                type="button"
-                className=" bg-zinc-900 text-zinc-100 px-4 py-2 rounded-md"
+              <div className="w-full mt-4">
+                <button
+                  onClick={() => setModalStatus(true)}
+                  type="button"
+                  className=" bg-zinc-900 text-zinc-100 px-4 py-2 rounded-md"
                 >
-                <Plus weight="bold" size={20}/>
-              </button>
-            </div>
-                </fieldset>
+                  <Plus weight="bold" size={20} />
+                </button>
+              </div>
+            </fieldset>
           </div>
         </div>
         <div className="flex justify-center mt-6 md:mt-10">
@@ -461,34 +468,34 @@ export function NewEntry({ categories,  entries, session }: NewEntryProps) {
           </button>
         </div>
       </form>
-      <Modal 
-        status={modalStatus} 
+      <Modal
+        status={modalStatus}
         setStatus={setModalStatus}
-        className='bg-zinc-50'
-        >
+        className="bg-zinc-50"
+      >
         <div className="flex flex-col gap-2">
-                    <input
-                      type="text"
-                      name="categories"
-                      id="categories"
-                      placeholder="Nome da Categoria"
-                      value={categoryName}
-                      onChange={(e) => setCategoryName(e.target.value)}
-                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
-                    />
-                    <input
-                      type="file"
-                      onChange={(event) => uploadFile(event)}
-                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
-                    />
-                    <button
-                      onClick={createCategory}
-                      type="button"
-                      className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
-                    >
-                      Criar
-                    </button>
-                  </div>
+          <input
+            type="text"
+            name="categories"
+            id="categories"
+            placeholder="Nome da Categoria"
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+            className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+          />
+          <input
+            type="file"
+            onChange={(event) => uploadFile(event)}
+            className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+          />
+          <button
+            onClick={createCategory}
+            type="button"
+            className="w-full rounded-md border border-gray-300 p-2 text-gray-500"
+          >
+            Criar
+          </button>
+        </div>
       </Modal>
     </div>
   );

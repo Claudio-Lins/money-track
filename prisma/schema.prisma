@@ -69,6 +69,7 @@ model Entry {
   notes         String?
   description   String?
   location      String?
+  file          String?
   bankAccount   String?
   recurring     Recurring?
   paymentMethod String?

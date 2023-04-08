@@ -8,6 +8,7 @@ interface CreateEntryInput {
   typeAccount: 'CORPORATIVO' | 'PERSONAL';
   notes?: string;
   description?: string;
+  file?: string;
   location?: string;
   bankAccount?: string;
   recurring?: 'VARIABLE' | 'FIXED';
