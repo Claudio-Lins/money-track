@@ -7,10 +7,10 @@ import { Month } from "./Month";
 import { useThemeStore } from "@/store/themeStore";
 import { priceFormatter } from "@/utils/formatter";
 import { useCurrentMonthStore } from "../store/currentMonthStore";
-
 import { useRouter } from "next/navigation";
-import { table } from "console";
 import { Pencil, Trash } from "phosphor-react";
+import { Th } from "./table/Th";
+import { Td } from "./table/Td";
 
 interface TableProps {
   entries: EntryProps[];
@@ -88,8 +88,10 @@ export function Transactions({ entries, session }: TableProps) {
     setTotal(totalByIncomeMonth - totalExpenseByMonth);
   }, [totalByIncomeMonth, totalExpenseByMonth]);
 
-  function handleDelete() {
-    console.log("delete");
+  async function handleDelete(id: number) {
+    await fetch(`/api/entries/${id}`, {
+      method: "DELETE",
+    });
   }
 
   function handleEdit() {
@@ -125,32 +127,12 @@ export function Transactions({ entries, session }: TableProps) {
         <table className="min-w-full divide-y divide-zinc-100 dark:divide-zinc-700">
           <thead className="bg-zinc-50 dark:bg-zinc-800">
             <tr>
-              <th
-                scope="col"
-                className="px-2 md:px-4 py-3 text-left md:text-sm text-[10px] font-medium text-zinc-300 uppercase tracking-wider"
-              >
-                Date
-              </th>
-              <th
-                scope="col"
-                className="px-4 py-3 text-left md:text-sm text-[10px] font-medium text-zinc-300 uppercase tracking-wider"
-              >
-                Descrição
-              </th>
-              <th
-                scope="col"
-                className="px-4 py-3 text-left md:text-sm text-[10px] font-medium text-zinc-300 uppercase tracking-wider"
-              >
-                Categoria
-              </th>
-              <th
-                scope="col"
-                className="px-4 py-3 text-left md:text-sm text-[10px] font-medium text-zinc-300 uppercase tracking-wider"
-              >
-                Valor
-              </th>
+              <Th>Data</Th>
+              <Th>Descrição</Th>
+              <Th>Categoria</Th>
+              <Th>Valor</Th>
               <th scope="col" className="relative px-4 py-3">
-                <span className="md:text-xs text-[10px] font-medium text-zinc-300 uppercase tracking-wider">
+                <span className="md:text-sm text-[10px] font-medium text-zinc-300 uppercase tracking-wider">
                   Ações
                 </span>
               </th>
@@ -181,20 +163,20 @@ export function Transactions({ entries, session }: TableProps) {
               ${index % 2 === 0 ? "bg-zinc-50 dark:bg-zinc-700" : "bg-zinc-500"}
               `}
                 >
-                  <td className="px-2 md:px-4 py-4 whitespace-nowrap">
+                  <Td>
                     <div className=" md:text-sm text-[10px] text-zinc-900 dark:text-zinc-100">
                       {new Intl.DateTimeFormat("pt-PT", {
                         day: "2-digit",
                         month: "short",
                       }).format(new Date(entry?.createdAt))}
                     </div>
-                  </td>
+                  </Td>
                   <td className="px-4 py-4 whitespace-nowrap">
                     <div className=" md:text-sm text-[10px] text-zinc-900 dark:text-zinc-100">
                       {entry.description}
                     </div>
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap">
+                  <Td>
                     <div className=" md:text-sm text-[10px] text-left text-zinc-900 dark:text-zinc-100">
                       {entry.categories?.map((category: any) => (
                         <div
@@ -212,16 +194,16 @@ export function Transactions({ entries, session }: TableProps) {
                         </div>
                       ))}
                     </div>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap">
-                    <div className=" md:text-sm text-[10px] text-zinc-900 dark:text-zinc-100">
+                  </Td>
+                  <Td>
+                    <div className=" md:text-sm text-[10px] text-zinc-900 font-bold dark:text-zinc-100">
                       {new Intl.NumberFormat("pt-PT", {
                         style: "currency",
                         currency: "EUR",
                       }).format(entry.amount)}
                     </div>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap  md:text-sm text-[10px] font-medium">
+                  </Td>
+                  <Td className="md:text-lg text-[10px] font-medium">
                     <div className="flex justify-center gap-2 items-center">
                       <button
                         onClick={() => handleEdit()}
@@ -230,20 +212,22 @@ export function Transactions({ entries, session }: TableProps) {
                         <Pencil />
                       </button>
                       <button
-                        onClick={() => handleDelete()}
+                        onClick={() => handleDelete(entry.id)}
                         className="text-zinc-900 dark:text-zinc-100 hover:text-zinc-700 dark:hover:text-zinc-300"
                       >
                         <Trash />
                       </button>
                     </div>
-                  </td>
+                  </Td>
                 </tr>
               ))}
           </tbody>
         </table>
 
         <div className="grid grid-cols-5 items-center">
-          <div className="col-span-3 text-right pr-8 md:pr-0 text-sm font-semibold md:text-lg">Total</div>
+          <div className="col-span-3 text-right pr-8 md:pr-0 text-sm font-semibold md:text-lg">
+            Total
+          </div>
           <div className="col-span-1">
             <p className="md:text-2xl text-xl text-zinc-900 drop-shadow-md font-bold pr-4 text-center">
               {priceFormatter.format(
