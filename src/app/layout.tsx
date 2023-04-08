@@ -5,6 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { useThemeStore } from "@/store/themeStore";
 import { Providers } from "./providers";
+import { NavbarMobile } from "@/components/NavbarMobile";
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata = {
@@ -33,6 +34,7 @@ export default function RootLayout({
         `}
       >
         <Providers>
+          <NavbarMobile/>
           <Navbar />
           {children}
         </Providers>

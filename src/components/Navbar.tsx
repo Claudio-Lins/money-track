@@ -26,6 +26,7 @@ export function Navbar() {
   return (
     <div
       className={`
+      hidden md:block
       fixed left-0 -top-1 z-10 w-full shadow-sm duration-300 ease-in  bg-white/10 backdrop-blur-sm
       ${theme === "light" ? "text-zinc-900" : "text-white"}`}
     >
