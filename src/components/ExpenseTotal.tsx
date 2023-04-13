@@ -17,14 +17,14 @@ export function ExpenseTotal({session}: any) {
   const [totalExpense, setTotalExpense] = useState(0);
   
   const { entriesExpense, setEntriesExpense } = useEntryStore();
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
-      const data = await response.json();
-      setEntriesExpense(data);
-    };
-    fetchData();
-  }, [setEntriesExpense]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
+  //     const data = await response.json();
+  //     setEntriesExpense(data);
+  //   };
+  //   fetchData();
+  // }, [setEntriesExpense]);
 
   useEffect(() => {
     const total = entriesExpense

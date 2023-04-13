@@ -2,11 +2,11 @@
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { GoogleBtn } from "./GoogleBtn";
-
-export default function Component({ children }: {
+export default async function Component({ children }: {
   children: React.ReactNode;
 }) {
   const { data: session } = useSession();
+
   if (session) {
     return (
       <div className="p-4 flex items-center gap-2">

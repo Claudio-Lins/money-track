@@ -10,14 +10,14 @@ export function IncomeTotal({ session }: any) {
   const [totalIncome, setTotalIncome] = useState(0);
   
   const { entriesIncome, setEntriesIncome } = useEntryStore();
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
-      const data = await response.json();
-      setEntriesIncome(data);
-    };
-    fetchData();
-  }, [setEntriesIncome]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`);
+  //     const data = await response.json();
+  //     setEntriesIncome(data);
+  //   };
+  //   fetchData();
+  // }, [setEntriesIncome]);
 
   useEffect(() => {
     const total = entriesIncome

@@ -1,8 +1,9 @@
-"use client";
 
+import { getEntries } from "@/lib/fetchs";
 import { FormEvent } from "react";
 
-export default function Dashborad() {
+export default async function Dashborad() {
+  const entries = await getEntries();
   
   function createEntry() {
     fetch(`/api/entries/create-entry`, {
@@ -39,7 +40,9 @@ export default function Dashborad() {
     <div className="w-full backdrop-blur-sm max-w-6xl flex justify-center overflow-auto rounded-md bg-white/50 p-4">
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        
+        <pre>
+          {JSON.stringify(entries, null, 2)}
+        </pre>
       </div>
     </div>
   );

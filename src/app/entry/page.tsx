@@ -6,7 +6,6 @@ import { getServerSession } from "next-auth";
 
 export default async function Entry() {
   const session = await getServerSession(authOptions);
-  console.log("{session}");
 
   const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`, {
     cache: 'no-cache'
