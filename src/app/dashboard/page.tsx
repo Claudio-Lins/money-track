@@ -1,48 +1,25 @@
 
-import { getEntries } from "@/lib/fetchs";
-import { FormEvent } from "react";
+import { CategoryProps } from "@/@types/CategoryProps";
+import { EntryProps } from "@/@types/EntryProps";
+import { getEntries, getCategories } from "@/lib/fetchs";
+import Combustivel from "./components/categories/Combustivel";
 
 export default async function Dashborad() {
-  const entries = await getEntries();
   
-  function createEntry() {
-    fetch(`/api/entries/create-entry`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        amount: 110,
-        type: "INCOME",
-        notes: "Teste",
-        description: "Teste",
-        bankAccount: 'WiZink',
-        recurring: 'VARIABLE',
-        paymentMethod: 'Cartão',
-        userId: 'clfl25od500007wd8aygiy79j',
-        categories: {
-          connect: {
-            id: 2
-          }
-        }
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log({ data }));
-  }
+  const entries = await getEntries();
+  const categories = await getCategories();
 
-  function onSubmit(event: FormEvent) {
-    event.preventDefault();
-    createEntry();
-  }
+ 
+
 
   return (
     <div className="w-full backdrop-blur-sm max-w-6xl flex justify-center overflow-auto rounded-md bg-white/50 p-4">
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        <pre>
-          {JSON.stringify(entries, null, 2)}
-        </pre>
+        <div className="flex w-full gap-16 justify-between">
+         
+            <Combustivel entries={entries} categories={categories}/>
+        </div>
       </div>
     </div>
   );

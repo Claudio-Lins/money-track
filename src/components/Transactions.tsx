@@ -1,8 +1,7 @@
 "use client";
-import { Category, EntryProps } from "@/@types/EntryProps";
+import { EntryProps } from "@/@types/EntryProps";
 import Image from "next/image";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Month } from "./Month";
 import { useThemeStore } from "@/store/themeStore";
 import { priceFormatter } from "@/utils/formatter";
@@ -11,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { Eye, Pencil, Trash } from "phosphor-react";
 import { Th } from "./table/Th";
 import { Td } from "./table/Td";
+import { CategoryProps } from "@/@types/CategoryProps";
 
 interface TableProps {
   entries: EntryProps[];
@@ -35,9 +35,9 @@ export function Transactions({ entries, session }: TableProps) {
 
   useEffect(() => {
     const totalExpense = entries
-      .filter((entry) => entry.type === "EXPENSE")
-      .filter((entry: any) => entry.User?.email === session?.user?.email)
-      .filter((entry: any) =>
+      .filter((entry: EntryProps) => entry.type === "EXPENSE")
+      .filter((entry: EntryProps) => entry.User?.email === session?.user?.email)
+      .filter((entry: EntryProps) =>
         new Intl.DateTimeFormat("pt-PT", {
           month: "2-digit",
         })
@@ -47,14 +47,13 @@ export function Transactions({ entries, session }: TableProps) {
       )
       .reduce((acc, entry) => acc + entry.amount, 0);
     setTotalExpenseByMonth(totalExpense);
-    router.refresh();
-  }, []);
+  }, [currentMonthTwoDigits, entries, router, session?.user?.email]);
 
   useEffect(() => {
     const totalIncome = entries
       .filter((entry) => entry.type === "INCOME")
-      .filter((entry: any) => entry.User?.email === session?.user?.email)
-      .filter((entry: any) =>
+      .filter((entry: EntryProps) => entry.User?.email === session?.user?.email)
+      .filter((entry: EntryProps) =>
         new Intl.DateTimeFormat("pt-PT", {
           month: "2-digit",
         })
@@ -64,8 +63,7 @@ export function Transactions({ entries, session }: TableProps) {
       )
       .reduce((acc, entry) => acc + entry.amount, 0);
     setTotalIncomeByMonth(totalIncome);
-    router.refresh();
-  }, []);
+  }, [currentMonthTwoDigits, entries, router, session?.user?.email]);
 
   function toggleTypeData() {
     setIncome(!income);
@@ -143,15 +141,16 @@ export function Transactions({ entries, session }: TableProps) {
           </thead>
           <tbody className="bg-white divide-y divide-zinc-100 dark:divide-zinc-700 dark:bg-zinc-800">
             {entries
-              .filter((entry: any) => entry.type === typeData)
+              .filter((entry: EntryProps) => entry.type === typeData)
               .filter(
-                (entry: any) => entry.User?.email === session?.user?.email
+                (entry: EntryProps) => entry.User?.email === session?.user?.email
               )
-              .filter((entry: any) => entry.amount > 0)
-              .filter((entry: any) =>
+              .filter((entry: EntryProps) => entry.amount > 0)
+              .filter((entry: EntryProps) =>
+              // @ts-expect-error
                 entry.createdAt.slice(0, 4).includes(currentYear)
               )
-              .filter((entry: any) =>
+              .filter((entry: EntryProps) =>
                 new Intl.DateTimeFormat("pt-PT", {
                   month: "2-digit",
                 })
@@ -159,7 +158,7 @@ export function Transactions({ entries, session }: TableProps) {
                   .slice(0, 4)
                   .includes(String(currentMonthTwoDigits))
               )
-              .map((entry: any, index: number) => (
+              .map((entry: EntryProps, index: number) => (
                 <tr
                   key={entry.id}
                   className={`
@@ -181,7 +180,7 @@ export function Transactions({ entries, session }: TableProps) {
                   </td>
                   <Td>
                     <div className=" md:text-sm text-[10px] text-left text-zinc-900 dark:text-zinc-100">
-                      {entry.categories?.map((category: any) => (
+                      {entry.categories?.map((category: CategoryProps) => (
                         <div
                           key={category.id}
                           className="flex gap-2 items-center  text-zinc-50"
