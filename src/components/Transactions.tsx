@@ -95,7 +95,6 @@ export function Transactions({ entries, session }: TableProps) {
     router.refresh();
   }
 
- 
   function handleEdit() {
   }
 

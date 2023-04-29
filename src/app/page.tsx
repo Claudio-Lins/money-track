@@ -1,17 +1,12 @@
 import { ExpenseTotal } from "@/components/ExpenseTotal";
 import { GoogleBtn } from "@/components/GoogleBtn";
 import { IncomeTotal } from "@/components/IncomeTotal";
-import { StartEntry } from "@/components/StartEntry";
 import { Total } from "@/components/Total";
-import { getEntries, getUsers } from "@/lib/fetchs";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  const entries = await getEntries();
-  const users = await getUsers()
-
   return (
     <>
       {session ? (
@@ -21,8 +16,6 @@ export default async function Home() {
             <IncomeTotal session={session} />
             <Total session={session} />
           </div>
-          {/* @ts-ignore */}
-          <StartEntry entries={entries} session={session}/>
         </main>
       ) : (
         <div className="w-full max-w-sm rounded-lg bg-white/40 backdrop-blur-sm p-8 flex flex-col justify-center mt-8 items-center gap-4">
