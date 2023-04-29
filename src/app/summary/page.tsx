@@ -1,8 +1,16 @@
-import React from "react";
+
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { Transactions } from "@/components/Transactions";
 import { getEntries } from "@/lib/fetchs";
+
+// async function getEntries() {
+//   const res = await fetch(`${process.env.BASE_URL}/api/entries/getAllEntries`, {
+//     cache: 'no-cache'
+//   });
+//   const entries = await res.json();
+//   return entries;
+// }
 
 export default async function Sumary() {
   const session = await getServerSession(authOptions);

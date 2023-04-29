@@ -12,6 +12,17 @@ export async function StartEntry({entries, session}: any) {
       .filter((value, index, array) => array.indexOf(value) === index)[0];
   }
 
+
+  const emailSession = session?.user?.email;
+  function emailEntry() {
+   const emailEntries = entries
+   .filter((entry: any) => entry.User.email)
+   .map((entry: any) => entry.User.email)
+   return String(emailEntries)
+     .split(",")
+     .filter((value, index, array) => array.indexOf(value) === index)[0];
+  }
+
   function createEntry() {
     fetch(`${process.env.BASE_URL}/api/entries/create-entry`, {
       method: "POST",
@@ -22,7 +33,7 @@ export async function StartEntry({entries, session}: any) {
         amount: 110,
         type: "INCOME",
         typeAccount: "CORPORATIVO",
-        userId: getUserIdByEmail(),
+        userId: emailSession,
       }),
     })
       .then((res) => res.json())
@@ -35,19 +46,10 @@ export async function StartEntry({entries, session}: any) {
     createEntry();
   }
 
-   const emailSession = session?.user?.email;
-   function emailEntry() {
-    const emailEntries = entries
-    .filter((entry: any) => entry.User.email)
-    .map((entry: any) => entry.User.email)
-    return String(emailEntries)
-      .split(",")
-      .filter((value, index, array) => array.indexOf(value) === index)[0];
-   }
-
-   if (emailSession !== emailEntry()) {
-     console.log('Diferent')
-     createEntry()
+  
+  if (emailSession !== emailEntry()) {
+    console.log('Email diferentes')
+    createEntry()
     } else {
     console.log('Não criar Entry');
   }

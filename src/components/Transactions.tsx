@@ -48,7 +48,7 @@ export function Transactions({ entries, session }: TableProps) {
       .reduce((acc, entry) => acc + entry.amount, 0);
     setTotalExpenseByMonth(totalExpense);
     router.refresh();
-  }, [currentMonthTwoDigits, entries, router, session?.user?.email, typeData]);
+  }, []);
 
   useEffect(() => {
     const totalIncome = entries
@@ -64,7 +64,8 @@ export function Transactions({ entries, session }: TableProps) {
       )
       .reduce((acc, entry) => acc + entry.amount, 0);
     setTotalIncomeByMonth(totalIncome);
-  }, [currentMonthTwoDigits, entries, session?.user?.email, typeData]);
+    router.refresh();
+  }, []);
 
   function toggleTypeData() {
     setIncome(!income);
@@ -86,21 +87,18 @@ export function Transactions({ entries, session }: TableProps) {
 
   useEffect(() => {
     setTotal(totalByIncomeMonth - totalExpenseByMonth);
-  }, [totalByIncomeMonth, totalExpenseByMonth]);
+    router.refresh();
+  }, [router, totalByIncomeMonth, totalExpenseByMonth]);
 
   async function handleDelete(id: number) {
     await fetch(`/api/entries/${id}`, {
       method: "DELETE",
     });
+    router.refresh();
   }
 
-  function handleOpenReceip() {
-    console.log("open");
-  }
-
-
+ 
   function handleEdit() {
-    console.log("edit");
   }
 
   return (
