@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react';
+'use client'
+
+import React, { useState, useEffect } from 'react'
 
 export function Calendary() {
   const [month, setMonth] = useState(new Date())
