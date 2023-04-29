@@ -1,5 +1,5 @@
 "use client";
-import { Category, EntryProps } from "@/@types/EntryProps";
+import { EntryProps } from "@/@types/EntryProps";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -54,8 +54,8 @@ export function Summary({
   useEffect(() => {
     const totalIncome = entries
       .filter((entry) => entry.type === "INCOME")
-      .filter((entry: any) => entry.User?.email === session?.user?.email)
-      .filter((entry: any) =>
+      .filter((entry: EntryProps) => entry.User?.email === session?.user?.email)
+      .filter((entry: EntryProps) =>
         new Intl.DateTimeFormat("pt-PT", {
           month: "2-digit",
         })
