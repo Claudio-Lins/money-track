@@ -1,5 +1,5 @@
 "use client";
-import { EntryProps, User } from "@/@types/EntryProps";
+
 import useEntryStore from "@/store/entriesIncomeStore";
 import { priceFormatter } from "@/utils/formatter";
 import { ArrowUp } from "phosphor-react";

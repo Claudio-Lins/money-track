@@ -1,5 +1,7 @@
 "use client";
-import { Category, EntryProps, User } from "@/@types/EntryProps";
+import { CategoryProps } from "@/@types/CategoryProps";
+import {  EntryProps } from "@/@types/EntryProps";
+import { UserProps } from "@/@types/UserProps";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { priceFormatter } from "@/utils/formatter";
 import { getServerSession } from "next-auth";
@@ -9,8 +11,8 @@ import useEntryStore from "../store/entriesExpenseStore";
 
 interface ExpenseProps {
   entries: EntryProps[];
-  category: Category[];
-  User: User | null;
+  category: CategoryProps[];
+  User: UserProps | null;
 }
 
 export function ExpenseTotal({session}: any) {
