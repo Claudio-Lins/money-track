@@ -8,28 +8,36 @@ import React, { useEffect, useState } from "react";
 interface CombustivelProps {
   entries: EntryProps[];
   categories: CategoryProps[]
+  categoria: string
 }
 
-export default function Combustivel({ entries, categories }: CombustivelProps) {
-  const [combustivel, setCombustivel] = useState(0);
-  const [categoria, setCategoria] = useState("Alimentação");
+export default function Categorias({ entries, categoria }: CombustivelProps) {
+  const [soma, setSoma] = useState(0);
+  const [color, setColor] = useState('')
 
   useEffect(() => {
-    const combustivel = entries
-      ?.filter((entry: EntryProps) => entry.type === "EXPENSE")
+    const soma = entries
+      // ?.filter((entry: EntryProps) => entry.type === "EXPENSE")
       .filter((entry: EntryProps) =>
         entry.categories?.some(
           (category: CategoryProps) => category.name === categoria
         )
       )
       .reduce((acc: any, curr: { amount: any }) => acc + curr.amount, 0);
-    setCombustivel(combustivel);
+      if(entries
+        ?.map((entry: EntryProps) => entry.type === "INCOME")) {
+          setColor('bg-blue-500')
+        } else {
+          setColor('bg-green-500')
+        }
+      setSoma(soma);
   }, [categoria, entries]);
   return (
-    <div>
-      <p>{priceFormatter.format(combustivel)}</p>
+    <div className={`${color} w-32 flex flex-col justify-between items-center overflow-hidden rounded-md shadow-md`}>
+      <strong className="bg-white w-full py-1 text-2xl text-center">{priceFormatter.format(soma)}</strong>
+      <strong className=" w-full py-1 text-zinc-50 text-center">{categoria}</strong>
       <div className="flex items-center gap-2">
-        {categories
+        {/* {categories
         ?.map((category: CategoryProps) => (
               <button
                 key={category.id}
@@ -42,7 +50,7 @@ export default function Combustivel({ entries, categories }: CombustivelProps) {
               >
                 {category.name}
               </button>
-            ))}
+            ))} */}
       </div>
     </div>
   );

@@ -201,7 +201,7 @@ export function Transactions({ entries, session }: TableProps) {
                       {new Intl.NumberFormat("pt-PT", {
                         style: "currency",
                         currency: "EUR",
-                      }).format(entry.amount)}
+                      }).format(entry.amount/100)}
                     </div>
                   </Td>
                   <Td className="md:text-lg text-[10px] font-medium">
@@ -243,8 +243,8 @@ export function Transactions({ entries, session }: TableProps) {
             <p className="md:text-2xl text-xl text-zinc-900 drop-shadow-md font-bold pr-4 text-center">
               {priceFormatter.format(
                 typeData === "EXPENSE"
-                  ? totalExpenseByMonth
-                  : totalByIncomeMonth
+                  ? totalExpenseByMonth/100
+                  : totalByIncomeMonth/100
               )}
             </p>
           </div>

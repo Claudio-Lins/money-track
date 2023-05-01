@@ -33,7 +33,7 @@ export function IncomeTotal({ session }: any) {
     <>
     <div className="p-4 flex items-center gap-2 bg-white shadow-md w-full max-w-xs justify-between rounded-lg">
       <div className=" text-green-700 text-3xl font-extrabold">
-        {priceFormatter.format(totalIncome)}
+        {priceFormatter.format(totalIncome/100)}
       </div>
       <ArrowUp size={24} weight="bold" color="#0fb40c" />
     </div></>

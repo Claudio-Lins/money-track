@@ -55,7 +55,7 @@ export function Total({ session }: any) {
       ${total <= 0 ? "text-red-700" : "text-blue-700"}
       `}
       >
-        {priceFormatter.format(total)}
+        {priceFormatter.format(total/100)}
       </strong>
     </div>
   );

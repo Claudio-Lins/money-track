@@ -11,6 +11,10 @@ export default async function handler(
       categories: true,
       User: true,
     },
+    // sort desc
+    orderBy: {
+      createdAt: 'asc',
+    },
   });
   res.status(200).json(entries);
 }

@@ -278,7 +278,7 @@ export function NewEntry({ categories, entries, session }: NewEntryProps) {
           <div className="w-full md:w-1/2 flex flex-col gap-4 px-2">
             <div className="flex w-full justify-between items-center gap-2">
               <input
-                type="tel"
+                type="number"
                 placeholder="Valor"
                 value={formData.amount}
                 onChange={(e) =>
